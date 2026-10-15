@@ -1,0 +1,28 @@
+{
+  "name": "Reverb",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.11.2",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.11.2",
+  "dependencies": {
+    "@discordjs/rest": "^2.6.3",
+    "discord.js": "^14.27.0",
+    "fs": "0.0.1-security",
+    "lavalink-client": "^2.11.0",
+    "mongoose": "^9.11.1",
+    "youtubei.js": "^18.1.0"
+  }
+}
