@@ -23,9 +23,9 @@ class reverbLavalinkManager extends LavalinkManager {
         });
         this.youtubeMusicInstance = new youtubeMusic(this);
         this.client = client;
-        this._loadEvents().catch((err) => {
-            console.error(`[ PLAYER ] Error loading player events: ${err}`);
-        });
+
+        this._loadNodeEvents();
+        this._loadLavalinkEvents();
     }
 
     getPlayer(guildId) {
@@ -73,57 +73,42 @@ class reverbLavalinkManager extends LavalinkManager {
         return this.players.delete(guildId);
     }
 
-    async _loadEvents() {
+    async _loadNodeEvents() {
         let count = 0;
-        const dir = readdirSync("./src/events/player/").filter((f) =>
+        const dir = readdirSync("./src/events/node/").filter((f) =>
             f.endsWith(".js"),
         );
-        if (!dir.length) throw new Error(`[ EVENTS ] No player event files found!`);
+        if (!dir.length) console.warn(`[ EVENTS ] No Node event files found!`);
 
         for (const file of dir) {
             try {
-                const event = require(`../events/player/${file}`);
-                this.on(event.name, event.run.bind(null, this.client));
-                console.log(`[ EVENTS ] Player event loaded: ${event.name}`);
+                const event = require(`../events/node/${file}`);
+                this.nodeManager.on(event.name, event.run.bind(null));
+                console.log(`[ EVENTS ] Node event loaded: ${event.name}`);
                 count++;
             } catch (err) {
-                console.error(`[ EVENTS ] Error loading player event ${file}: ${err}`);
+                console.error(`[ EVENTS ] Error loading Node event ${file}: ${err}`);
             }
         }
+    }
 
-        console.log(`[ EVENTS ] ${count} Player events loaded.`);
+    async _loadLavalinkEvents() {
+        let count = 0;
+        const dir = readdirSync("./src/events/lavalink/").filter((f) =>
+            f.endsWith(".js"),
+        );
+        if (!dir.length) console.warn(`[ EVENTS ] No Lavalink event files found!`);
 
-        this.nodeManager.on("create", (node) => {
-            console.log(`[ LAVALINK ] Created node: ${node.id}`);
-        });
-
-        this.nodeManager.on("connect", (node) => {
-            console.log(`[ LAVALINK ] Connected: ${node.id}`);
-        });
-
-        this.nodeManager.on("error", (node, error, payload) => {
-            console.error(`[ LAVALINK ] Node error: ${node.id}`);
-            console.error("Message:", error?.message);
-            console.error("Error:", error);
-
-            if (payload) {
-                console.error("Payload:", payload);
+        for (const file of dir) {
+            try {
+                const event = require(`../events/lavalink/${file}`);
+                this.on(event.name, event.run.bind(null, this.client));
+                console.log(`[ EVENTS ] Lavalink event loaded: ${event.name}`);
+                count++;
+            } catch (err) {
+                console.error(`[ EVENTS ] Error loading Lavalink event ${file}: ${err}`);
             }
-        });
-
-        this.nodeManager.on("disconnect", (node, reason) => {
-            console.error(`[ LAVALINK ] Disconnected: ${node.id}`);
-            console.error("Reason:", reason);
-        });
-
-        this.nodeManager.on("reconnecting", (node) => {
-            console.warn(`[ LAVALINK ] Reconnecting: ${node.id}`);
-        });
-
-        this.nodeManager.on("reconnectinprogress", (node) => {
-            console.warn(`[ LAVALINK ] Reconnection started: ${node.id}`);
-        });
-
+        }
     }
 };
 

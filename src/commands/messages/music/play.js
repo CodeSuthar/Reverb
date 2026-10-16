@@ -164,8 +164,6 @@ module.exports = {
                 }
 
                 await guildPlayer.queue.add(track);
-
-                console.log(JSON.stringify(track.info));
                 
                 if (!guildPlayer.playing || !guildPlayer.paused) await guildPlayer.play({ paused: false });
 

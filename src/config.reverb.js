@@ -17,7 +17,7 @@ module.exports = {
         maxVolume: 200,
         playYoutube: false
     },
-    
+
     lavalink: {
         nodes: [
             {
@@ -29,7 +29,7 @@ module.exports = {
             }
         ]
     },
-    
+
     database: {
         mongoURI: process.env.MONGO_URI || "",
     },

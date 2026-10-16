@@ -1,5 +1,5 @@
  <p align="center">
-  <img src="./docs/public/Reverb-Banner.png" alt="Reverb Logo" width="512" style="border-radius: 50px;">
+  <img src="./docs/public/Reverb-Banner.png" alt="Reverb Logo" width="512">
 </p>
 
 <h1 align="center">Reverb</h1>
@@ -18,12 +18,106 @@
   </a>
 </p>
 
----
-
 <p align="center">
-  <b>Reverb</b> is an open-source Discord music bot currently being developed in <b>JavaScript (for now)</b>.<br>
+  <b>Reverb</b> is an open-source Discord music bot currently under development in <b>JavaScript</b>.
+  <br>
   Built with a focus on reliability, music discovery, and a better user experience.
 </p>
+
+---
+
+## Roadmap
+
+Reverb is actively being rebuilt. This roadmap outlines the current implementation, completed work, and features still in progress. Priorities may change as development continues.
+
+### Step 1: Command Handler
+
+* [x] Build the foundational command handler.
+* [x] Reuse and clean up ideas from previous projects, including Zeon, SynthMusic, and the older Reverb handler.
+* [x] Establish the foundation for registering and executing commands.
+* [ ] Expand command validation and improve error handling.
+* [ ] Add automated tests for command execution and argument parsing.
+
+### Step 2: Unified Music Search
+
+Build a unified search system that discovers music across multiple providers, matches playable tracks against reference metadata, and ranks the results by relevance.
+
+#### Spotify Reference
+
+* [x] Search Spotify first to obtain a reference track.
+* [x] Use the reference title, artist, and duration to evaluate candidate tracks.
+* [x] Keep Spotify as a metadata reference instead of adding Spotify results as playable candidates.
+
+#### Multi-Provider Search
+
+* [x] Search providers sequentially in a configured order.
+* [x] Support YouTube Music, YouTube, Apple Music, Deezer, Tidal, JioSaavn, SoundCloud, and Bandcamp.
+* [x] Search the default Lavalink source as a final fallback.
+* [x] Handle individual provider failures without immediately aborting the entire search.
+
+#### YouTube Music Integration
+
+* [x] Use `youtubei.js` to discover YouTube Music songs.
+* [x] Resolve discovered songs through Lavalink into playable YouTube tracks.
+* [x] Preserve YouTube Music artist metadata for matching.
+* [x] Prioritise YouTube Music results when a sufficiently strong match is found.
+
+#### Matching and Ranking
+
+* [x] Score candidates using title similarity, artist similarity, and duration differences.
+* [x] Apply a duration-match bonus to YouTube Music candidates.
+* [x] Rank candidates against the Spotify reference when available.
+* [x] Return up to five tracks in the final search results.
+* [x] Deduplicate candidates using track URIs and identifiers.
+* [x] Prefer YouTube Music candidates when duplicate results are discovered.
+* [x] Attach reference metadata without overwriting the playable track's original information.
+
+#### Pending Improvements
+
+* [ ] Improve title and artist normalisation for alternate spellings, featured artists, remixes, and regional music.
+* [ ] Improve artist matching for collaborations and variations in provider metadata.
+* [ ] Add configurable provider timeouts and stronger failure handling.
+* [ ] Reduce unnecessary requests and improve search latency (performance).
+### Step 3: Music Commands
+
+Implement the core music controls and connect them to Reverb's player and queue system.
+
+* [ ] `play` — Search for music and add tracks to the queue.
+* [ ] `pause` — Pause playback.
+* [ ] `resume` — Resume playback.
+* [ ] `skip` — Skip the current track.
+* [ ] `stop` — Stop playback and handle queue cleanup.
+* [ ] `queue` — Display queued tracks.
+* [ ] `nowplaying` — Display information about the current track.
+* [ ] `volume` — Adjust playback volume.
+* [ ] `loop` — Configure track or queue looping.
+* [ ] `shuffle` — Shuffle the queue.
+* [ ] Add further commands as the project evolves.
+
+### Step 4: TypeScript Migration
+
+JavaScript is being used while the architecture evolves. A migration to TypeScript is planned once the core implementation becomes more stable.
+
+* [ ] Establish migration requirements and a practical strategy.
+* [ ] Introduce TypeScript when the core architecture is ready.
+* [ ] Add types for the client, manager, player, queues, and search results.
+* [ ] Improve maintainability and catch more errors during development.
+* [ ] Update development tooling and documentation.
+
+*The migration may happen earlier if it becomes beneficial.*
+
+### Step 5: Web Dashboard
+
+Build a web dashboard to make Reverb easier to configure and manage.
+
+* [ ] Establish the dashboard's server-side architecture.
+* [ ] Use EJS for server-rendered pages.
+* [ ] Add Discord authentication and appropriate access controls.
+* [ ] Provide guild-specific music configuration.
+* [ ] Add dashboard pages for supported settings and features.
+* [ ] Keep the dashboard lightweight without introducing a frontend framework unnecessarily.
+
+---
 
 ## A Note From the Developer
 
@@ -103,60 +197,15 @@ I'm sharing it because I don't want to hide the past behind the project. Feel fr
 
 ---
 
-## Roadmap
-
-Reverb is still under active development. This roadmap reflects what I'm currently working on, and things may change as the project evolves.
-
-* [x] **Step 1: Command Handler**
-
-  * Build a command handler for Reverb, reusing and cleaning up ideas from my older bots, including Zeon, SynthMusic, and the older Reverb handler.
-
-* [ ] **Step 2: Unified Music Search**
-
-  * Build a search system that collects results from supported platforms such as Spotify, YouTube, and SoundCloud.
-  * Rank results based on relevance, including track names, artists, and other metadata.
-  * Prioritise official music releases and YouTube Music results over unrelated regular YouTube videos whenever possible.
-  * Use `youtubei.js` to discover suitable music results.
-  * Convert YouTube Music links when necessary so they can be passed to the player correctly.
-
-* [ ] **Step 3: Music Commands**
-
-  * Implement the core music commands, including:
-
-    * `play`
-    * `pause`
-    * `resume`
-    * `skip`
-    * `stop`
-    * `queue`
-    * `nowplaying`
-    * `volume`
-    * `loop`
-    * `shuffle`
-  * Add more commands as the project develops.
-
-* [ ] **Step 4: TypeScript Migration**
-
-  * Start with JavaScript while the architecture is still evolving, then migrate to TypeScript when it makes sense.
-  * Improve maintainability, catch more errors during development, and make the codebase easier to work with as the project grows.
-  * I might switch to TypeScript earlier if I feel it makes more sense. Nothing is set in stone yet.
-
-* [ ] **Step 5: Web Dashboard**
-
-  * Build a web dashboard to make Reverb easier to configure and manage.
-  * Use EJS for server-rendered pages instead of introducing React, Vue, or Angular when a simpler solution will do the job.
-
----
-
 ## Tech Stack
 
-The project is currently being developed using:
+Reverb is currently being developed using the following technologies:
 
-* **JavaScript** — the primary development language for now.
-* **Lavalink** — for audio delivery and playback infrastructure.
-* **`lavalink-client`** — for interacting with Lavalink from the bot.
-* **`youtubei.js`** — for YouTube and YouTube Music discovery.
-* **EJS** — planned for the future web dashboard.
+* **JavaScript** — The primary development language during the current development phase.
+* **Lavalink** — Audio playback infrastructure.
+* **`lavalink-client`** — Communication with Lavalink and management of music players.
+* **`youtubei.js`** — YouTube and YouTube Music discovery.
+* **EJS** — Planned templating engine for the future web dashboard.
 
 The stack may evolve as development continues.
 
@@ -179,7 +228,7 @@ The project is still evolving, so feedback and suggestions are always appreciate
 
 Reverb is an independent, community-oriented project currently under development. Features, supported music sources, and implementation details may change over time.
 
-The project is not affiliated with Discord, Spotify, YouTube, or SoundCloud.
+The project is not affiliated with Discord, Spotify, YouTube, SoundCloud, Apple Music, Deezer, Tidal, JioSaavn, or Bandcamp.
 
 ---
 

@@ -2,7 +2,7 @@ const { readdirSync } = require("fs");
 
 module.exports = async (client) => {
     let count = 0;
-    let parentDir = readdirSync("./src/events/").filter((f) => f !== "player");
+    let parentDir = readdirSync("./src/events/").filter((f) => f !== "node" && f !== "lavalink");
     for (const dir of parentDir) {
         const events = readdirSync(`./src/events/${dir}/`).filter((f) => f.endsWith(".js"));
         if (!events.length) throw new Error(`[ EVENTS ] No client event files found in ${dir}!`);
