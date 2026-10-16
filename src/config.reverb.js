@@ -1,9 +1,11 @@
+require("dotenv").config();
+
 module.exports = {
     bot: {
         name: "",
         clientId: process.env.CLIENT_ID || "",
         clientSecret: process.env.CLIENT_SECRET || "",
-        token: process.env.TOKEN || "",
+        token: process.env.CLIENT_TOKEN || "",
         prefix: "!",
         developerIds: [""],
         invite: "",
@@ -27,38 +29,14 @@ module.exports = {
             }
         ]
     },
-
-    // Webhooks: {
-    //     Lavalinks: process.env.LavalinkWebhook || "",
-    // },
-
-    // BotList: {
-    //     TopGG: {
-    //         APIToken: process.env.TopGGToken || "",
-    //         LinkToVote: ""
-    //     }
-    // },
-
-    // Dashboard: {
-    //     ShouldRun: true,
-    //     Information: {
-    //         ClientID: process.env.CLIENT_ID || "",
-    //         ClientSecret: process.env.CLIENT_SECRET || "",
-    //         Domain: process.env.DOMAIN || "",
-    //         CallbackURL: process.env.CallbackURL || "/api/callback",
-    //         Port: 3180,
-    //         Scopes: ["identify", "guilds"],
-    //         ReverseProxy: ""
-    //     } 
-    // },
     
     database: {
-        mongoURI: process.env.MONGO_URI || "mongodb+srv://idk:idk@reverbbot.xtg4h0y.mongodb.net/?appName=ReverbBot",
+        mongoURI: process.env.MONGO_URI || "",
     },
 
     emojis: {
-        tick: "<:icons_1:1558609677342744806>",
-        cross: "<:icons_2:1558609712076030004>",
+        tick: "✅",
+        cross: "❌",
         hey: "👋",
         join: "📥",
         leave: "📤",

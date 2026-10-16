@@ -1,6 +1,6 @@
 const { LavalinkManager } = require("lavalink-client");
 const reverbPlayer = require("./reverbPlayer.js");
-const { Innertube } = require("youtubei.js");
+const youtubeMusic = require("./youtubeMusic.js");
 const { readdirSync } = require("fs");
 
 class reverbLavalinkManager extends LavalinkManager {
@@ -21,7 +21,7 @@ class reverbLavalinkManager extends LavalinkManager {
             },
             ...options
         });
-        this.innertube = new Innertube();
+        this.youtubeMusicInstance = new youtubeMusic(this);
         this.client = client;
         this._loadEvents().catch((err) => {
             console.error(`[ PLAYER ] Error loading player events: ${err}`);

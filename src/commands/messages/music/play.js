@@ -64,9 +64,7 @@ module.exports = {
 
             let songQuery = args.join(" ");
 
-            let searchResult = await guildPlayer.search({
-                query: `spsearch:${songQuery}`, // Use Spotify search
-            }, message.author);
+            let searchResult = await guildPlayer.customReverbSearch(songQuery, message.author);
 
             if (!searchResult || !searchResult.tracks.length) {
                 let emb = new EmbedBuilder()
@@ -80,7 +78,7 @@ module.exports = {
                 });
             }
 
-            if (searchResult.playlist) {
+            if (checkIfSearchResultIsPlaylist(searchResult)) {
                 let msg = await message.reply({
                     content: `${client.emojiList.loading} | Adding **${searchResult.tracks.length} songs** from the playlist \`${searchResult.playlist.title}\` to the queue.`,
                 });
@@ -166,6 +164,8 @@ module.exports = {
                 }
 
                 await guildPlayer.queue.add(track);
+
+                console.log(JSON.stringify(track.info));
                 
                 if (!guildPlayer.playing || !guildPlayer.paused) await guildPlayer.play({ paused: false });
 
@@ -188,8 +188,10 @@ module.exports = {
                     ])
                     .setTimestamp();
 
-                if (track.info.artworkUrl) {
-                    emb.setThumbnail(track.info.artworkUrl);
+                if (track.yt) {
+                    if (track.metadata?.artworkUrl) emb.setThumbnail(track.metadata?.artworkUrl);
+                } else if (track.info?.artworkUrl) {
+                    emb.setThumbnail(track.info?.artworkUrl);
                 }
 
                 return message.reply({
