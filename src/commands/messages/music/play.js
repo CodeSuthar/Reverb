@@ -64,6 +64,26 @@ module.exports = {
 
             let songQuery = args.join(" ");
 
+            if (checkIfURIIsYoutubeBased(songQuery) && !client.config.music.playYoutube) {
+                    let emb = new EmbedBuilder()
+                        .setColor("Red")
+                        .setDescription(
+                            `${client.emojiList.cross} | Unfortunately, due to recent demand from both YouTube and Discord, I am unable to play music from YouTube at this time. Please use a different source for your music.`,
+                        )
+                        .addFields([
+                            {
+                                name: "Alternative Sources",
+                                value:
+                                    "You can use sources like Spotify, SoundCloud, or other supported platforms to play music.",
+                                inline: false,
+                            },
+                        ]);
+
+                    return message.reply({
+                        embeds: [emb],
+                    });
+                }
+
             let searchResult = await guildPlayer.customReverbSearch(songQuery, message.author);
 
             if (!searchResult || !searchResult.tracks.length) {
@@ -82,27 +102,6 @@ module.exports = {
                 let msg = await message.reply({
                     content: `${client.emojiList.loading} | Adding **${searchResult.tracks.length} songs** from the playlist \`${searchResult.playlist.title}\` to the queue.`,
                 });
-
-                if (checkIfURIIsYoutubeBased(songQuery) && !client.config.music.playYoutube) {
-                    let emb = new EmbedBuilder()
-                        .setColor("Red")
-                        .setDescription(
-                            `${client.emojiList.cross} | Unfortunately, due to recent demand from both YouTube and Discord, I am unable to play music from YouTube at this time. Please use a different source for your music.`,
-                        )
-                        .addFields([
-                            {
-                                name: "Alternative Sources",
-                                value:
-                                    "You can use sources like Spotify, SoundCloud, or other supported platforms to play music.",
-                                inline: false,
-                            },
-                        ]);
-
-                    return msg.edit({
-                        content: null,
-                        embeds: [emb],
-                    });
-                }
 
                 await guildPlayer.queue.add(searchResult.tracks);
 
@@ -164,8 +163,6 @@ module.exports = {
                 }
 
                 await guildPlayer.queue.add(track);
-
-                console.log(JSON.stringify(track.info));
                 
                 if (!guildPlayer.playing || !guildPlayer.paused) await guildPlayer.play({ paused: false });
 

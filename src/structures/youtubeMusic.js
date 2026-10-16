@@ -1,11 +1,17 @@
-
 const { Innertube } = require("youtubei.js");
 
-class YTMusic {
+class youtubeMusic {
     constructor(lavalinkManager) {
         this.lavalinkManager = lavalinkManager;
         this.youtube = null;
         this.initializing = null;
+
+        this.searchCache = new Map();
+        this.pendingSearches = new Map();
+
+        this.cacheTtlMs = 5 * 60 * 1000;
+        this.maxCacheSize = 200;
+        this.maxSongsPerQuery = 10;
     }
 
     async init() {
@@ -15,6 +21,10 @@ class YTMusic {
             this.initializing = Innertube.create({
                 lang: "en",
                 location: "IN",
+                // We only search metadata, so skip downloading the player
+                // script and build the session locally. Both cut startup time.
+                retrieve_player: false,
+                generate_session_locally: true,
             })
                 .then((youtube) => {
                     this.youtube = youtube;
@@ -27,6 +37,15 @@ class YTMusic {
         }
 
         return this.initializing;
+    }
+
+    /**
+     * Start the session in the background so the first search is not slow.
+     */
+    warmup() {
+        return this.init().catch((error) => {
+            console.error("[YTM] Warmup failed:", error);
+        });
     }
 
     getText(value) {
@@ -100,6 +119,37 @@ class YTMusic {
         };
     }
 
+    /**
+     * Fetch (and cache) the song list for a query.
+     */
+    async _fetchSongs(cacheKey, query) {
+        const youtube = await this.init();
+
+        const result = await youtube.music.search(query, {
+            type: "song",
+        });
+
+        const songs = (result.songs?.contents ?? [])
+            .map((item) => this.getSongDetails(item))
+            .filter((song) => song.identifier && song.title)
+            .slice(0, this.maxSongsPerQuery);
+
+        if (songs.length) {
+            this.searchCache.set(cacheKey, {
+                songs,
+                expiresAt: Date.now() + this.cacheTtlMs,
+            });
+
+            while (this.searchCache.size > this.maxCacheSize) {
+                this.searchCache.delete(
+                    this.searchCache.keys().next().value,
+                );
+            }
+        }
+
+        return songs;
+    }
+
     async searchSongs(query, limit = 10) {
         if (typeof query !== "string" || !query.trim()) {
             throw new TypeError(
@@ -107,19 +157,32 @@ class YTMusic {
             );
         }
 
-        const youtube = await this.init();
+        const cacheKey = query.trim().toLowerCase();
 
-        const result = await youtube.music.search(query, {
-            type: "song",
-        });
+        const cached = this.searchCache.get(cacheKey);
 
-        const songs = result.songs?.contents ?? [];
+        if (cached) {
+            if (cached.expiresAt > Date.now()) {
+                return cached.songs.slice(0, limit);
+            }
 
-        return songs
-            .map((item) => this.getSongDetails(item))
-            .filter((song) => song.identifier && song.title)
-            .slice(0, limit);
+            this.searchCache.delete(cacheKey);
+        }
+
+        let pending = this.pendingSearches.get(cacheKey);
+
+        if (!pending) {
+            pending = this._fetchSongs(cacheKey, query.trim()).finally(
+                () => this.pendingSearches.delete(cacheKey),
+            );
+
+            this.pendingSearches.set(cacheKey, pending);
+        }
+
+        const songs = await pending;
+
+        return songs.slice(0, limit);
     }
 }
 
-module.exports = YTMusic;
+module.exports = youtubeMusic;

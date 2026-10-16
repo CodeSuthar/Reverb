@@ -4,7 +4,7 @@ const {
     GatewayIntentBits,
     Partials,
 } = require("discord.js");
-const playerManager = require("./playerManager.js");
+const reverbLavalinkManager = require("./reverbLavalinkManager.js");
 
 module.exports = class ReverbClient extends Client {
     constructor() {
@@ -41,7 +41,7 @@ module.exports = class ReverbClient extends Client {
     }
 
     _loadMusicManager() {
-        this.musicManager = new playerManager(this);
+        this.musicManager = new reverbLavalinkManager(this);
     }
 
     _loadRestManager() {
@@ -55,7 +55,7 @@ module.exports = class ReverbClient extends Client {
             "clientEvents",
             "commands",
             "slashCommands",
-            "connectDB",
+            "connectDatabase",
             "errors"
         ]
 

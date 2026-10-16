@@ -45,7 +45,7 @@ module.exports = {
             return message.reply({
                 embeds: [emb]
             });
-        } catch (error) {
+        } catch (err) {
             console.dir(err, { depth: null });
 
             if (err.errors) {
