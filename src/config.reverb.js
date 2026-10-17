@@ -37,6 +37,7 @@ module.exports = {
     emojis: {
         tick: "✅",
         cross: "❌",
+        loading: "⏳",
         hey: "👋",
         join: "📥",
         leave: "📤",

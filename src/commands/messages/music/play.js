@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const { checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "play",
@@ -115,7 +116,7 @@ module.exports = {
                     .addFields([
                         {
                             name: "Playlist Duration",
-                            value: `\`[ ${searchResult.playlist.durationFormatted} ]\``,
+                            value: `\`[ ${convertMillisecondsToTime(searchResult.playlist.duration)} ]\``,
                             inline: true,
                         },
                         {
@@ -142,39 +143,19 @@ module.exports = {
             } else {
                 let track = searchResult.tracks[0];
 
-                if (checkIfURIIsYoutubeBased(songQuery) && !client.config.music.playYoutube) {
-                    let emb = new EmbedBuilder()
-                        .setColor("Red")
-                        .setDescription(
-                            `${client.emojiList.cross} | Unfortunately, due to recent demand from both YouTube and Discord, I am unable to play music from YouTube at this time. Please use a different source for your music.`,
-                        )
-                        .addFields([
-                            {
-                                name: "Alternative Sources",
-                                value:
-                                    "You can use sources like Spotify, SoundCloud, or other supported platforms to play music.",
-                                inline: false,
-                            },
-                        ]);
-
-                    return message.reply({
-                        embeds: [emb],
-                    });
-                }
-
                 await guildPlayer.queue.add(track);
                 
-                if (!guildPlayer.playing || !guildPlayer.paused) await guildPlayer.play({ paused: false });
+                if (!guildPlayer.playing || guildPlayer.paused) await guildPlayer.play({ paused: false });
 
                 let emb = new EmbedBuilder()
                     .setColor("#FF66C4")
                     .setDescription(
-                        `${client.emojiList.tick} | Added **${track.info.title}** to the queue.`,
+                        `${client.emojiList.tick} | Added **[${track.metadata.title}](${track.metadata.uri})** to the queue.`,
                     )
                     .addFields([
                         {
                             name: "Duration",
-                            value: `\`[ ${track.info.duration} ]\``,
+                            value: `\`[ ${convertMillisecondsToTime(track.info.duration)} ]\``,
                             inline: true,
                         },
                         {
@@ -185,11 +166,7 @@ module.exports = {
                     ])
                     .setTimestamp();
 
-                if (track.yt) {
-                    if (track.metadata?.artworkUrl) emb.setThumbnail(track.metadata?.artworkUrl);
-                } else if (track.info?.artworkUrl) {
-                    emb.setThumbnail(track.info?.artworkUrl);
-                }
+                if (track.metadata?.artworkUrl) emb.setThumbnail(track.metadata?.artworkUrl);
 
                 return message.reply({
                     embeds: [emb]
@@ -214,12 +191,3 @@ module.exports = {
         }
     }
 };
-
-function checkIfSearchResultIsPlaylist(searchResult) {
-    if (searchResult.loadType === "playlist") return true;
-    return false;
-}
-
-function checkIfURIIsYoutubeBased(url) {
-    return /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi.test(url);
-}

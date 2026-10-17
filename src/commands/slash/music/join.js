@@ -7,7 +7,16 @@ module.exports = {
     run: async (client, interaction) => {
         await interaction.deferReply();
 
-        let guildPlayer = await client.player.guildPlayer(interaction.guildId);
+        let guildPlayer = client.musicManager.getPlayer(interaction.guildId);
+
+        console.log({
+            guildPlayer: guildPlayer ? "exists" : "does not exist",
+            connected: guildPlayer ? guildPlayer.connected : "N/A",
+            voiceChannelId: guildPlayer ? guildPlayer.voiceChannelId : "N/A",
+            memberVoiceChannelId: interaction.member.voice.channel ? interaction.member.voice.channel.id : "N/A",
+            voiceChannelMembers: guildPlayer && guildPlayer.voiceChannel ? guildPlayer.voiceChannel.members.size : "N/A",
+            queueLength: guildPlayer ? guildPlayer.queue.tracks.length : "N/A"
+        });
 
         if (!interaction.member.voice.channel) {
             let emb = new EmbedBuilder()
@@ -15,17 +24,21 @@ module.exports = {
                 .setDescription(
                     `${client.emojiList.cross} | You need to be in a voice channel to use this command.`,
                 );
-                
+
             return await interaction.editReply({
                 embeds: [emb]
             });
         }
 
-        if (guildPlayer && guildPlayer.queue && guildPlayer.queue.channel.id !== interaction.member.voice.channelId) {
+        if (
+            guildPlayer && 
+            guildPlayer.connected && 
+            guildPlayer.voiceChannelId !== interaction.member.voice.channelId
+        ) {
             let emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(
-                    `${client.emojiList.cross} | I am already playing music in ${guildPlayer.queue.channel}. Please join that channel to listen.`,
+                    `${client.emojiList.cross} | I am already playing music in ${guildPlayer.voiceChannel}. Please join that channel to listen.`,
                 );
             
             return await interaction.editReply({
@@ -33,7 +46,12 @@ module.exports = {
             });
         }
 
-        if (guildPlayer && guildPlayer.queue && guildPlayer.queue.size === 0 && guildPlayer.queue.channel.id === interaction.member.voice.channelId) {
+        if (
+            guildPlayer && 
+            guildPlayer.connected && 
+            (!guildPlayer.queue.current && guildPlayer.queue.tracks.length === 0) && 
+            guildPlayer.voiceChannelId === interaction.member.voice.channelId
+        ) {
             let emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(
@@ -45,7 +63,12 @@ module.exports = {
             });
         }
 
-        if (guildPlayer && guildPlayer.queue && guildPlayer.queue.size > 0 && guildPlayer.queue.channel.id === interaction.member.voice.channelId) {
+        if (
+            guildPlayer && 
+            guildPlayer.connected && 
+            (guildPlayer.queue.current || guildPlayer.queue.tracks.length > 0) && 
+            guildPlayer.voiceChannelId === interaction.member.voice.channelId
+        ) {
             let emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(
@@ -63,23 +86,17 @@ module.exports = {
             try {
                 let join = client.emojiList.join;
 
-                guildPlayer = await client.player.manager.nodes.create(interaction.guildId, {
-                    leaveOnEmpty: true,
-                    leaveOnEmptyCooldown: 300000, // 5 minutes
-                    leaveOnEnd: true,
-                    leaveOnEndCooldown: 300000, // 5 minutes
-                    leaveOnStop: true,
-                    leaveOnStopCooldown: 600000, // 10 minutes
+                guildPlayer = await client.musicManager.createPlayer({
+                    guildId: interaction.guildId,
+                    voiceChannelId: voiceChannelToJoin.id,
+                    textChannelId: interaction.channelId,
                     selfDeaf: true,
-                    volume: 100,
-                    bufferingTimeout: 200,
-                    metadata: {
-                        textChannel: interaction.channelId,
-                        playingMessage: null
-                    },
+                    selfMute: false,
+                    volume: client.config.music.defaultVolume,
+                    vcRegion: voiceChannelToJoin.rtcRegion || null,
                 });
-
-                await guildPlayer.connect(voiceChannelToJoin.id);
+                
+                if (!guildPlayer.connected) await guildPlayer.connect();
 
                 let emb = new EmbedBuilder()
                     .setColor("#FF66C4")
@@ -90,7 +107,7 @@ module.exports = {
                 return await interaction.editReply({
                     embeds: [emb]
                 });
-            } catch (error) {
+            } catch (err) {
                 console.dir(err, { depth: null });
 
                 if (err.errors) {
@@ -109,4 +126,4 @@ module.exports = {
             }
         }
     }
-}
+};

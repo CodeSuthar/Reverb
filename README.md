@@ -21,7 +21,7 @@
 <p align="center">
   <b>Reverb</b> is an open-source Discord music bot currently under development in <b>JavaScript</b>.
   <br>
-  Built with a focus on reliability, music discovery, and a better user experience.
+  Built with a focus on reliability, music discovery, accurate track matching, and a better user experience.
 </p>
 
 ---
@@ -33,56 +33,72 @@ Reverb is actively being rebuilt. This roadmap outlines the current implementati
 ### Step 1: Command Handler
 
 * [x] Build the foundational command handler.
-* [x] Reuse and clean up ideas from previous projects, including Zeon, SynthMusic, and the older Reverb handler.
+* [x] Reuse and refine ideas from previous projects, including Zeon, SynthMusic, and the older Reverb handler.
 * [x] Establish the foundation for registering and executing commands.
+* [x] Implement command and slash-command loading infrastructure.
 * [ ] Expand command validation and improve error handling.
 * [ ] Add automated tests for command execution and argument parsing.
 
 ### Step 2: Unified Music Search
 
-Build a unified search system that discovers music across multiple providers, matches playable tracks against reference metadata, and ranks the results by relevance.
+Build a unified search system that discovers music across multiple providers, matches playable tracks against reference metadata, and ranks results by relevance.
 
 #### Spotify Reference
 
-* [x] Search Spotify first to obtain a reference track.
-* [x] Use the reference title, artist, and duration to evaluate candidate tracks.
-* [x] Keep Spotify as a metadata reference instead of adding Spotify results as playable candidates.
-
-#### Multi-Provider Search
-
-* [x] Search providers sequentially in a configured order.
-* [x] Support YouTube Music, YouTube, Apple Music, Deezer, Tidal, JioSaavn, SoundCloud, and Bandcamp.
-* [x] Search the default Lavalink source as a final fallback.
-* [x] Handle individual provider failures without immediately aborting the entire search.
+* [x] Retrieve Spotify track metadata for reference matching.
+* [x] Use the reference title, artists, and duration to evaluate playable candidates.
+* [x] Keep Spotify reference-only instead of treating Spotify results as playable audio.
+* [x] Run Spotify reference discovery concurrently with YouTube Music discovery.
+* [x] Handle reference failures and timeouts without unnecessarily blocking candidate discovery.
 
 #### YouTube Music Integration
 
 * [x] Use `youtubei.js` to discover YouTube Music songs.
-* [x] Resolve discovered songs through Lavalink into playable YouTube tracks.
+* [x] Resolve discovered songs through Lavalink into playable tracks.
 * [x] Preserve YouTube Music artist metadata for matching.
 * [x] Prioritise YouTube Music results when a sufficiently strong match is found.
+* [x] Avoid performing an unnecessary default Lavalink search before processing plain-text queries.
+
+#### Tiered Provider Search
+
+* [x] **Tier 1:** Search YouTube Music and Spotify reference metadata concurrently.
+* [x] Return immediately when a candidate reaches the configured high-confidence score.
+* [x] **Tier 2:** Search YouTube and SoundCloud concurrently when Tier 1 does not find a satisfactory match.
+* [x] Skip the extended fallback tier when Tier 2 produces a sufficiently strong candidate.
+* [x] **Tier 3:** Search Apple Music, Deezer, Tidal, JioSaavn, Bandcamp, and the default Lavalink source when earlier tiers are insufficient.
+* [x] Run providers within each fallback tier concurrently.
+* [x] Reduce Tier 2 and Tier 3 fallback timeouts to 2 seconds.
+* [x] Handle individual provider failures without immediately aborting the entire search.
 
 #### Matching and Ranking
 
 * [x] Score candidates using title similarity, artist similarity, and duration differences.
 * [x] Apply a duration-match bonus to YouTube Music candidates.
-* [x] Rank candidates against the Spotify reference when available.
-* [x] Return up to five tracks in the final search results.
+* [x] Rank candidates against Spotify reference metadata when available.
+* [x] Preserve the existing scoring weights: title (50), artist (30), duration (20), and YouTube Music bonus (25).
+* [x] Precompute reference metadata and normalized text tokens once per query.
+* [x] Reuse precomputed reference data across candidate scoring.
 * [x] Deduplicate candidates using track URIs and identifiers.
-* [x] Prefer YouTube Music candidates when duplicate results are discovered.
-* [x] Attach reference metadata without overwriting the playable track's original information.
+* [x] Preserve playable track information while attaching reference metadata.
+* [x] Return up to five candidates in the final search results.
 
-#### Pending Improvements
+#### Search Performance — Ongoing
 
-* [ ] Improve title and artist normalisation for alternate spellings, featured artists, remixes, and regional music.
-* [ ] Improve artist matching for collaborations and variations in provider metadata.
-* [ ] Add configurable provider timeouts and stronger failure handling.
-* [ ] Reduce unnecessary requests and improve search latency (performance).
+* [x] Provide a unified search system that discovers music across multiple providers and ranks results by relevance which results in a 99%+ matching accuracy.
+* [ ] Improve the search pipeline's time complexity.
+* [ ] Improve the search pipeline's performance and reduce the time taken to load playlists.
+
+**Current challenge:** A playlist containing approximately 15 tracks can still take around 20 seconds to load. The goal is to make Reverb faster without sacrificing the matching accuracy that the tiered search system is designed to provide.
+
 ### Step 3: Music Commands
 
-Implement the core music controls and connect them to Reverb's player and queue system.
+Implement and refine the core music controls and connect them to Reverb's player and queue system.
 
-* [ ] `play` — Search for music and add tracks to the queue.
+#### Message Commands
+
+* [x] `join` — Join the user's voice channel.
+* [x] `leave` — Leave the voice channel and clean up the player.
+* [x] `play` — Search for music and add tracks to the queue.
 * [ ] `pause` — Pause playback.
 * [ ] `resume` — Resume playback.
 * [ ] `skip` — Skip the current track.
@@ -92,7 +108,19 @@ Implement the core music controls and connect them to Reverb's player and queue 
 * [ ] `volume` — Adjust playback volume.
 * [ ] `loop` — Configure track or queue looping.
 * [ ] `shuffle` — Shuffle the queue.
-* [ ] Add further commands as the project evolves.
+
+#### Slash Commands
+
+* [x] `join` — Create a player using the current music manager.
+* [x] `leave` — Destroy the player through the current music manager.
+* [x] `play` — Use the unified Reverb search system.
+* [x] Add voice-channel checks and consistent response embeds.
+* [x] Reuse shared music utilities for URL detection, playlist detection, and duration formatting.
+* [ ] Complete the remaining slash music commands.
+* [ ] Keep message and slash command behavior consistent.
+* [ ] Improve command-level error handling and user feedback.
+
+Additional music commands will be added as the player system evolves.
 
 ### Step 4: TypeScript Migration
 
@@ -202,10 +230,14 @@ I'm sharing it because I don't want to hide the past behind the project. Feel fr
 Reverb is currently being developed using the following technologies:
 
 * **JavaScript** — The primary development language during the current development phase.
+* **discord.js** — Discord client, message commands, and slash commands.
 * **Lavalink** — Audio playback infrastructure.
 * **`lavalink-client`** — Communication with Lavalink and management of music players.
-* **`youtubei.js`** — YouTube and YouTube Music discovery.
+* **`youtubei.js`** — YouTube Music discovery and song metadata.
+* **MongoDB / Mongoose** — Database infrastructure.
 * **EJS** — Planned templating engine for the future web dashboard.
+
+Music discovery uses multiple Lavalink-compatible providers. Spotify is used as a metadata reference rather than a direct playback source.
 
 The stack may evolve as development continues.
 

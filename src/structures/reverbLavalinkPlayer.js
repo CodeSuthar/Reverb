@@ -167,7 +167,7 @@ class reverbLavalinkPlayer extends Player {
                             `[SEARCH] No match found for playlist track: ${trackQuery}`,
                         );
                     }
-                    
+
                     return tracks[0] ?? null;
                 } catch (error) {
                     console.error(
@@ -181,12 +181,20 @@ class reverbLavalinkPlayer extends Player {
 
         const bestTracks = resolved.filter(Boolean);
 
+        const totalDuration = bestTracks.reduce(
+            (total, track) => total + (Number(track.info?.duration) || 0),
+            0,
+        );
+
         return {
             ...playlistResult,
             loadType: bestTracks.length ? "playlist" : "empty",
             exception: null,
             playlist: bestTracks.length
-                ? playlistResult.playlist ?? null
+                ? {
+                    ...playlistResult.playlist,
+                    duration: totalDuration,
+                }
                 : null,
             tracks: bestTracks,
         };
@@ -780,9 +788,9 @@ class reverbLavalinkPlayer extends Player {
 
         const ytMusicDurationBonus =
             track.searchSource === "ytmsearch" &&
-            ref.referenceDuration > 0 &&
-            candidateDuration > 0 &&
-            durationDifference < 1000
+                ref.referenceDuration > 0 &&
+                candidateDuration > 0 &&
+                durationDifference < 1000
                 ? 25
                 : 0;
 
