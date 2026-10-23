@@ -24,10 +24,9 @@ module.exports = {
 
         // Status
         let statuses = [
-            `With Version ${require(`${process.cwd()}/package.json`).version}`,
-            `Serving ${scount} Guilds!`,
-            `Serving ${mcount} Users!`,
-            "In Beta"
+            `in version ${require(`${process.cwd()}/package.json`).version}`,
+            `music in ${scount} Guilds!`,
+            `serving music to ${mcount} Users!`
         ];
 
         let updateStatus = async () => {
