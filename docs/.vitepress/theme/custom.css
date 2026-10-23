@@ -1,0 +1,274 @@
+/* Reverb Brand Theme & Mermaid Integration Styling */
+
+:root {
+  --reverb-pink: #FF66C4;
+  --reverb-pink-soft: rgba(255, 102, 196, 0.12);
+  --reverb-pink-glow: rgba(255, 102, 196, 0.25);
+  --vp-c-brand-1: #FF66C4;
+  --vp-c-brand-2: #E84FA8;
+  --vp-c-brand-3: #D03B8E;
+  --vp-c-brand-soft: rgba(255, 102, 196, 0.14);
+}
+
+/* ==========================================================================
+   Footer & Brand Attribution Styling
+   ========================================================================== */
+
+.VPFooter .message a,
+.VPFooter .copyright a {
+  color: var(--reverb-pink) !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.VPFooter .message a:hover,
+.VPFooter .copyright a:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.VPFooter .copyright span {
+  color: var(--reverb-pink) !important;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Mermaid Container
+   ========================================================================== */
+
+.mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background-color: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow-x: auto;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+  font-family: var(--vp-font-family-base, inherit);
+}
+
+/* ==========================================================================
+   Light Mode Styling
+   ========================================================================== */
+
+/* Flowchart Nodes & Edges */
+html:not(.dark) .mermaid svg .node rect,
+html:not(.dark) .mermaid svg .node circle,
+html:not(.dark) .mermaid svg .node ellipse,
+html:not(.dark) .mermaid svg .node polygon,
+html:not(.dark) .mermaid svg .node path {
+  fill: #FFF2F9;
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html:not(.dark) .mermaid svg .label text,
+html:not(.dark) .mermaid svg .node text,
+html:not(.dark) .mermaid svg .edgeLabel {
+  fill: #2B1824 !important;
+  color: #2B1824 !important;
+  font-weight: 500;
+}
+
+html:not(.dark) .mermaid svg .edgePath path,
+html:not(.dark) .mermaid svg .flowchart-link {
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html:not(.dark) .mermaid svg .marker,
+html:not(.dark) .mermaid svg .arrowheadPath {
+  fill: var(--reverb-pink);
+  stroke: var(--reverb-pink);
+}
+
+/* Subgraphs / Clusters */
+html:not(.dark) .mermaid svg .cluster rect {
+  fill: #FFF9FC;
+  stroke: #FFB3DE;
+  stroke-width: 1px;
+}
+
+/* Sequence Diagrams */
+html:not(.dark) .mermaid svg .actor {
+  fill: #FFF2F9;
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html:not(.dark) .mermaid svg text.actor > tspan {
+  fill: #2B1824 !important;
+}
+
+html:not(.dark) .mermaid svg line.actor-line {
+  stroke: var(--reverb-pink);
+  stroke-dasharray: 4 4;
+}
+
+html:not(.dark) .mermaid svg .messageLine0,
+html:not(.dark) .mermaid svg .messageLine1 {
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html:not(.dark) .mermaid svg .messageText {
+  fill: #2B1824 !important;
+  stroke: none !important;
+}
+
+html:not(.dark) .mermaid svg .activation0,
+html:not(.dark) .mermaid svg .activation1,
+html:not(.dark) .mermaid svg .activation2 {
+  fill: #FFE0F0;
+  stroke: var(--reverb-pink);
+}
+
+html:not(.dark) .mermaid svg .note {
+  fill: #FFFDF5;
+  stroke: #E6B800;
+  stroke-width: 1px;
+}
+
+html:not(.dark) .mermaid svg .noteText,
+html:not(.dark) .mermaid svg .noteText > tspan {
+  fill: #3D3200 !important;
+}
+
+html:not(.dark) .mermaid svg .labelBox {
+  fill: #FFF2F9;
+  stroke: var(--reverb-pink);
+}
+
+html:not(.dark) .mermaid svg .labelText,
+html:not(.dark) .mermaid svg .loopText {
+  fill: #2B1824 !important;
+}
+
+html:not(.dark) .mermaid svg .loopLine {
+  stroke: var(--reverb-pink);
+}
+
+/* ==========================================================================
+   Dark Mode Styling
+   ========================================================================== */
+
+/* Flowchart Nodes & Edges */
+html.dark .mermaid svg .node rect,
+html.dark .mermaid svg .node circle,
+html.dark .mermaid svg .node ellipse,
+html.dark .mermaid svg .node polygon,
+html.dark .mermaid svg .node path {
+  fill: #241624;
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html.dark .mermaid svg .label text,
+html.dark .mermaid svg .node text,
+html.dark .mermaid svg .edgeLabel {
+  fill: #F3F4F6 !important;
+  color: #F3F4F6 !important;
+  font-weight: 500;
+}
+
+html.dark .mermaid svg .edgePath path,
+html.dark .mermaid svg .flowchart-link {
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html.dark .mermaid svg .marker,
+html.dark .mermaid svg .arrowheadPath {
+  fill: var(--reverb-pink);
+  stroke: var(--reverb-pink);
+}
+
+/* Subgraphs / Clusters */
+html.dark .mermaid svg .cluster rect {
+  fill: rgba(255, 102, 196, 0.05);
+  stroke: rgba(255, 102, 196, 0.4);
+  stroke-width: 1px;
+}
+
+html.dark .mermaid svg .cluster text {
+  fill: #F9A8D4 !important;
+}
+
+/* Sequence Diagrams */
+html.dark .mermaid svg .actor {
+  fill: #241624;
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html.dark .mermaid svg text.actor > tspan {
+  fill: #F3F4F6 !important;
+}
+
+html.dark .mermaid svg line.actor-line {
+  stroke: rgba(255, 102, 196, 0.5);
+  stroke-dasharray: 4 4;
+}
+
+html.dark .mermaid svg .messageLine0,
+html.dark .mermaid svg .messageLine1 {
+  stroke: var(--reverb-pink);
+  stroke-width: 1.5px;
+}
+
+html.dark .mermaid svg .messageText {
+  fill: #F3F4F6 !important;
+  stroke: none !important;
+}
+
+html.dark .mermaid svg .activation0,
+html.dark .mermaid svg .activation1,
+html.dark .mermaid svg .activation2 {
+  fill: rgba(255, 102, 196, 0.25);
+  stroke: var(--reverb-pink);
+}
+
+html.dark .mermaid svg .note {
+  fill: #282115;
+  stroke: #D9A74A;
+  stroke-width: 1px;
+}
+
+html.dark .mermaid svg .noteText,
+html.dark .mermaid svg .noteText > tspan {
+  fill: #FDE68A !important;
+}
+
+html.dark .mermaid svg .labelBox {
+  fill: #241624;
+  stroke: var(--reverb-pink);
+}
+
+html.dark .mermaid svg .labelText,
+html.dark .mermaid svg .loopText {
+  fill: #F3F4F6 !important;
+}
+
+html.dark .mermaid svg .loopLine {
+  stroke: var(--reverb-pink);
+}
+
+/* State & Class Diagrams */
+html.dark .mermaid svg .stateGroup rect {
+  fill: #241624;
+  stroke: var(--reverb-pink);
+}
+
+html.dark .mermaid svg .classGroup rect {
+  fill: #241624;
+  stroke: var(--reverb-pink);
+}

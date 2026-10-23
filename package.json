@@ -1,0 +1,62 @@
+{
+  "name": "Reverb",
+  "version": "1.0.0",
+  "description": "Modern Discord Music Bot powered by discord.js v14, Moonlink.js, and NodeLink with multi-database support.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeSuthar/Reverb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CodeSuthar/Reverb/issues"
+  },
+  "homepage": "https://github.com/CodeSuthar/Reverb#readme",
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "music-bot",
+    "discordjs",
+    "nodelink",
+    "lavalink",
+    "moonlink",
+    "vitepress"
+  ],
+  "author": "Aditya Suthar (CodeSuthar)",
+  "license": "Apache-2.0",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.11.2",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.11.2",
+  "dependencies": {
+    "@discordjs/rest": "^2.6.3",
+    "@electric-sql/pglite": "^0.5.10",
+    "@napi-rs/canvas": "^1.0.11",
+    "better-sqlite3": "^13.0.3",
+    "discord.js": "^14.27.0",
+    "dotenv": "^18.0.8",
+    "drizzle-orm": "^0.45.4",
+    "fs": "0.0.1-security",
+    "lrclib-api": "^2.2.0",
+    "mongoose": "^9.11.1",
+    "moonlink.js": "^5.2.0",
+    "mysql2": "^3.24.6",
+    "pg": "^8.23.1",
+    "youtubei.js": "^18.1.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.11",
+    "mermaid": "^11.17.2",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  }
+}

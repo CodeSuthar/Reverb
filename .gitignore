@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# pnpm files
+/pnpm-lock.yaml
+/pnpm-workspace.yaml
+/.env
+
+# Database files
+/data/
+
+# VitePress build output and cache
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Moonlink runtime cache and WAL
+.moonlink/
