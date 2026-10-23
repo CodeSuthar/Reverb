@@ -26,16 +26,17 @@ async function updateVoiceStatus(client, player, customStatus = null) {
             ? client.emojiList.pause
             : client.emojiList.note;
         const title = track.title || "Music";
-        statusText = `${icon} Playing ${title}`.slice(0, 400);
+        statusText = `${icon} **Playing:** ${title}`;
+        ellipsis = statusText.length > 128 ? statusText.substring(0, 125) + "..." : statusText;
     }
 
     // Avoid redundant Discord REST calls if status hasn't changed
-    if (player._lastVoiceStatus === statusText) return;
-    player._lastVoiceStatus = statusText;
+    if (player._lastVoiceStatus === ellipsis) return;
+    player._lastVoiceStatus = ellipsis;
 
     try {
         await client.rest.put(`/channels/${player.voiceChannelId}/voice-status`, {
-            body: { status: statusText },
+            body: { status: ellipsis },
         });
     } catch (_) {
         // Voice channel status may fail if bot lacks permission or feature is disabled
