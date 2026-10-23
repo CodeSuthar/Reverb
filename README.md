@@ -39,8 +39,7 @@
 
 <p align="center">
   <a href="https://discord.com/oauth2/authorize?client_id=1558414328456020028&permissions=281891692735824&integration_type=0&scope=bot+applications.commands">
-
-    <img src="https://img.shields.io/badge/✨%20Invite%20Official%20Bot-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="38">
+    <img src="https://img.shields.io/badge/✨%20Invite%20Official%20Bot-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="38"></img>
   </a>
   &nbsp;&nbsp;
   <a href="https://discord.gg/6UwVYHu2zu">
@@ -56,11 +55,6 @@ Prefer not to self-host? You can invite the **Official Reverb Bot** directly to 
 
 - 🔗 **Official Bot Invite:** [Click Here to Invite Reverb](https://discord.com/oauth2/authorize?client_id=1558414328456020028&permissions=281891692735824&integration_type=0&scope=bot+applications.commands)  
 - 💬 **Support Server:** [discord.gg/6UwVYHu2zu](https://discord.gg/6UwVYHu2zu)
-
-<p align="center">
-  <iframe src="https://discord.com/widget?id=1562271632209481859&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-</p>
-
 ---
 
 ## 🌟 Key Features
