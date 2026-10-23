@@ -18,8 +18,10 @@ async function updateVoiceStatus(client, player, customStatus = null) {
     if (!player || !player.voiceChannelId) return;
 
     let statusText = "";
+    let ellipsis = "";
     if (typeof customStatus === "string") {
         statusText = customStatus;
+        let ellipsis = statusText.length > 128 ? statusText.substring(0, 125) + "..." : statusText;
     } else if (player.current && !player.destroyed && !player.stopped) {
         const track = player.current;
         const icon = player.paused
