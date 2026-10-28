@@ -3,7 +3,9 @@ const {
     ChannelType,
     PermissionFlagsBits,
 } = require("discord.js");
-const { buildSetupView } = require("../../../utils/buildSetupView");
+const {
+    buildSetupView
+} = require("../../../utils/buildSetupView");
 
 module.exports = {
     name: "setup",

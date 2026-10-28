@@ -1,5 +1,9 @@
-const { PGlite } = require("@electric-sql/pglite");
-const { drizzle } = require("drizzle-orm/pglite");
+const {
+    PGlite
+} = require("@electric-sql/pglite");
+const {
+    drizzle
+} = require("drizzle-orm/pglite");
 const path = require("path");
 const fs = require("fs");
 const schemas = require("../schemas/postgres");

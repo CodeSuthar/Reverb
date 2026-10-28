@@ -1,12 +1,14 @@
 
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "volume",
     description: "Change the volume of the player in the voice channel.",
     usage: "<volume>",
     category: "music",
-    aliases: ["vol", "v"],
+    aliases: ["v", "vol"],
     player: {
         voice: true,
         active: true,

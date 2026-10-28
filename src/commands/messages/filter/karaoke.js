@@ -1,15 +1,15 @@
-const { EmbedBuilder } = require("discord.js");
-
-const ACCENT_COLOR = 0xFF66C4;
-const FILTER_NAME = "karaoke";
-const DISPLAY_NAME = "Karaoke";
+const {
+    EmbedBuilder
+} = require("discord.js");
+const filterName = "karaoke";
+const displayName = "Karaoke";
 
 module.exports = {
     name: "karaoke",
     description: "Toggle the Karaoke (vocal suppression) audio filter.",
     usage: "[on | off]",
     category: "filter",
-    aliases: ["sing"],
+    aliases: ["sing", "vocalremover", "vocalfilter", "karaokefilter", "karaokesound"],
     player: {
         voice: true,
         active: true,
@@ -21,7 +21,7 @@ module.exports = {
         const guildPlayer = await client.musicManager.players.get(message.guildId);
 
         const arg = args[0]?.toLowerCase();
-        const currentlyActive = guildPlayer.filters.isActive(FILTER_NAME);
+        const currentlyActive = guildPlayer.filters.isActive(filterName);
         let shouldEnable = !currentlyActive;
 
         if (arg === "on" || arg === "enable" || arg === "1") {
@@ -32,9 +32,9 @@ module.exports = {
 
         try {
             if (shouldEnable) {
-                guildPlayer.filters.enable(FILTER_NAME);
+                guildPlayer.filters.enable(filterName);
             } else {
-                guildPlayer.filters.disable(FILTER_NAME);
+                guildPlayer.filters.disable(filterName);
             }
 
             await guildPlayer.filters.apply();
@@ -43,16 +43,16 @@ module.exports = {
             const emb = new EmbedBuilder()
                 .setColor(client?.color?.hex ?? "#FF66C4")
                 .setDescription(
-                    `${client.emojiList.tick} | **The \`${DISPLAY_NAME}\` filter has been \`${status}\`.**`,
+                    `${client.emojiList.tick} | **The \`${displayName}\` filter has been \`${status}\`.**`,
                 );
 
             return message.reply({ embeds: [emb] });
         } catch (err) {
-            console.error(`Error toggling filter ${FILTER_NAME}:`, err);
+            console.error(`Error toggling filter ${filterName}:`, err);
             const emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(
-                    `${client.emojiList.cross} | **An error occurred while updating the \`${DISPLAY_NAME}\` filter.**`,
+                    `${client.emojiList.cross} | **An error occurred while updating the \`${displayName}\` filter.**`,
                 );
 
             return message.reply({ embeds: [emb] });

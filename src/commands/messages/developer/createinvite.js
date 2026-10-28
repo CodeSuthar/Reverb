@@ -7,8 +7,6 @@ const {
     ButtonStyle,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-
 module.exports = {
     name: "createinvite",
     description: "Generate an instant invite link for a specified server.",

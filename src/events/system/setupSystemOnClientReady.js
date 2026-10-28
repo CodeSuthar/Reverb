@@ -1,4 +1,6 @@
-const { buildSetupView } = require("../../utils/musicUtils/index");
+const {
+    buildSetupView
+} = require("../../utils/musicUtils/index");
 const logger = require("../../utils/logger");
 
 module.exports = {
@@ -16,7 +18,9 @@ module.exports = {
             let updatedCount = 0;
 
             for (const setupData of allSetups) {
-                const { guildId, textChannelId, messageId } = setupData;
+                const {
+    guildId, textChannelId, messageId
+} = setupData;
                 if (!guildId || !textChannelId) continue;
 
                 try {

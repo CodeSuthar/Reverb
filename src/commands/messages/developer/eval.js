@@ -8,8 +8,6 @@ const {
     ComponentType,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-
 module.exports = {
     name: "eval",
     description: "Execute JavaScript code directly in the bot context.",

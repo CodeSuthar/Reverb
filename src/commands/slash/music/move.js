@@ -1,4 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const {
+    EmbedBuilder, SlashCommandBuilder
+} = require("discord.js");
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -25,6 +27,14 @@ module.exports = {
             const emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(`${client.emojiList.cross} | **There are no songs in the queue to move.**`);
+            return await interaction.editReply({ embeds: [emb] });
+        }
+
+        const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+        if (isFairPlay) {
+            const emb = new EmbedBuilder()
+                .setColor("Red")
+                .setDescription(`${client.emojiList.cross} | **The queue cannot be rearranged while FairPlay is enabled.**`);
             return await interaction.editReply({ embeds: [emb] });
         }
 

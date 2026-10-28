@@ -6,10 +6,12 @@ const {
     ComponentType,
     SlashCommandBuilder,
 } = require("discord.js");
-const { convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
-const TRACKS_PER_PAGE = 5;
-const COLLECTOR_TIMEOUT = 120_000;
+const tracksPerPage = 5;
+const collectorTimeout = 120_000;
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -32,12 +34,12 @@ module.exports = {
         const currentTrack = guildPlayer.current;
         const queuedTracks = [...guildPlayer.queue.tracks];
         const totalDuration = queuedTracks.reduce((total, t) => total + (Number(t.duration) || 0), 0);
-        const totalPages = Math.max(1, Math.ceil(queuedTracks.length / TRACKS_PER_PAGE));
+        const totalPages = Math.max(1, Math.ceil(queuedTracks.length / tracksPerPage));
         let currentPage = 0;
 
         const buildEmbed = (page) => {
-            const start = page * TRACKS_PER_PAGE;
-            const slice = queuedTracks.slice(start, start + TRACKS_PER_PAGE);
+            const start = page * tracksPerPage;
+            const slice = queuedTracks.slice(start, start + tracksPerPage);
 
             const lines = slice.map((t, idx) => {
                 const pos = start + idx + 1;
@@ -76,7 +78,7 @@ module.exports = {
 
         const collector = reply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIMEOUT,
+            time: collectorTimeout,
         });
 
         collector.on("collect", async (i) => {

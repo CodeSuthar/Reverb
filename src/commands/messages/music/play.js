@@ -1,12 +1,20 @@
-const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
-const { checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    EmbedBuilder, 
+    PermissionFlagsBits
+} = require("discord.js");
+
+const {
+    checkIfURIIsYoutubeBased, 
+    checkIfSearchResultIsPlaylist, 
+    convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "play",
     description: "Play a song in your voice channel.",
     usage: "<song name or URL>",
     category: "music",
-    aliases: ["j"],
+    aliases: ["p"],
     permissions: {
         client: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
     },

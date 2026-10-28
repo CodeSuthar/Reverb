@@ -6,8 +6,8 @@ const {
     ComponentType,
 } = require("discord.js");
 
-const NODES_PER_PAGE = 2;
-const COLLECTOR_TIMEOUT = 120_000;
+const nodesPerPage = 2;
+const collectorTimeout = 120_000;
 
 function formatBytes(bytes) {
     if (!bytes || bytes === 0) return "0 B";
@@ -61,12 +61,12 @@ module.exports = {
             return message.reply({ embeds: [emptyEmbed] });
         }
 
-        const maxPages = Math.ceil(allNodes.length / NODES_PER_PAGE);
+        const maxPages = Math.ceil(allNodes.length / nodesPerPage);
         let currentPage = 0;
 
         const buildPageEmbed = (page) => {
-            const start = page * NODES_PER_PAGE;
-            const currentNodes = allNodes.slice(start, start + NODES_PER_PAGE);
+            const start = page * nodesPerPage;
+            const currentNodes = allNodes.slice(start, start + nodesPerPage);
 
             const embed = new EmbedBuilder()
                 .setColor(client?.color?.hex ?? "#FF66C4")
@@ -137,7 +137,7 @@ module.exports = {
 
         const collector = replyMessage.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIMEOUT,
+            time: collectorTimeout,
             filter: (interaction) => interaction.user.id === message.author.id,
         });
 

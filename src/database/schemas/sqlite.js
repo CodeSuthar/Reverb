@@ -1,4 +1,6 @@
-const { int, sqliteTable, text, uniqueIndex } = require("drizzle-orm/sqlite-core");
+const {
+    int, sqliteTable, text, uniqueIndex
+} = require("drizzle-orm/sqlite-core");
 const config = require("../../../config.reverb.js");
 
 const defaultPrefix = config.bot?.prefix || "r!";

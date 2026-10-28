@@ -10,12 +10,14 @@ const {
     ComponentType,
     SlashCommandBuilder,
 } = require("discord.js");
-const { convertMillisecondsToTime } = require("../../../utils/musicUtils/index.js");
+const {
+    convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-const LYRICS_PER_PAGE = 12;
-const MAX_PAGE_LENGTH = 3000;
-const COLLECTOR_TIMEOUT = 120_000;
+const accentColor = 0xFF66C4;
+const lyricsPerPage = 12;
+const maxPageLength = 3000;
+const collectorTimeout = 120_000;
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -77,14 +79,14 @@ module.exports = {
             ? lyricsData.lines.map((l) => l.line || l.text || l)
             : (lyricsData.lyrics || "").split("\n");
 
-        const totalPages = Math.max(1, Math.ceil(lines.length / LYRICS_PER_PAGE));
+        const totalPages = Math.max(1, Math.ceil(lines.length / lyricsPerPage));
         let currentPage = 0;
 
         const buildEmbed = (page) => {
-            const start = page * LYRICS_PER_PAGE;
-            const slice = lines.slice(start, start + LYRICS_PER_PAGE);
+            const start = page * lyricsPerPage;
+            const slice = lines.slice(start, start + lyricsPerPage);
             return new EmbedBuilder()
-                .setColor(ACCENT_COLOR)
+                .setColor(accentColor)
                 .setTitle(`Lyrics: ${track.title}`)
                 .setURL(track.uri)
                 .setDescription(slice.join("\n") || "No lyrics available.")
@@ -108,7 +110,7 @@ module.exports = {
 
         const collector = reply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIMEOUT,
+            time: collectorTimeout,
         });
 
         collector.on("collect", async (i) => {

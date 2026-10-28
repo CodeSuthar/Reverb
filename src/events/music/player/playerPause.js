@@ -1,4 +1,6 @@
-const { updateVoiceStatus, queueViewUpdate } = require("../../../utils/musicUtils/index");
+const {
+    updateVoiceStatus, queueViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "playerPause",

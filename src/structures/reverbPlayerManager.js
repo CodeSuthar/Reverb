@@ -1,4 +1,6 @@
-const { PlayerManager,  } = require("moonlink.js");
+const {
+    PlayerManager,
+} = require("moonlink.js");
 const reverbPlayer = require("./reverbPlayer.js");
 
 function validate(prop, validator, errorMessage) {

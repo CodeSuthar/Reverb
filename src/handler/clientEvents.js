@@ -1,4 +1,6 @@
-const { readdirSync } = require("fs");
+const {
+    readdirSync
+} = require("fs");
 const logger = require("../utils/logger");
 
 module.exports = async (client) => {

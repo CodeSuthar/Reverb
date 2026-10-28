@@ -1,5 +1,9 @@
-const { Pool } = require("pg");
-const { drizzle } = require("drizzle-orm/node-postgres");
+const {
+    Pool
+} = require("pg");
+const {
+    drizzle
+} = require("drizzle-orm/node-postgres");
 const schemas = require("../schemas/postgres");
 
 const botRepository = require("../repositories/botRepository");

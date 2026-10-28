@@ -8,7 +8,7 @@ const {
 } = require("discord.js");
 
 const GUILDS_PER_PAGE = 10;
-const COLLECTOR_TIME = 60_000;
+const collectorTime = 60_000;
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -66,7 +66,7 @@ module.exports = {
 
         const collector = reply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIME,
+            time: collectorTime,
         });
 
         collector.on("collect", async (i) => {

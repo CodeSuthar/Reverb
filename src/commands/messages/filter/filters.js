@@ -10,9 +10,9 @@ const {
     EmbedBuilder,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-const COLLECTOR_TIME = 90_000;
-const COLLECTOR_IDLE = 45_000;
+const accentColor = 0xFF66C4;
+const collectorTime = 90_000;
+const collectorIdle = 45_000;
 
 /**
  * Formats a raw filter string so that the first letter of each word is capitalized.
@@ -81,7 +81,7 @@ function buildFiltersContainer({
     statusText = null,
     disabled = false,
 }) {
-    const accentColor = client?.color?.number ?? ACCENT_COLOR;
+    const accentColor = client?.color?.number ?? accentColor;
     const container = new ContainerBuilder()
         .setAccentColor(accentColor);
 
@@ -202,7 +202,7 @@ module.exports = {
             await guildPlayer.filters.apply();
 
             const emb = new EmbedBuilder()
-                .setColor(client?.color?.number ?? ACCENT_COLOR)
+                .setColor(client?.color?.number ?? accentColor)
                 .setDescription(
                     `${client.emojiList.tick} | **Successfully cleared all audio filters from the player.**`,
                 );
@@ -221,7 +221,7 @@ module.exports = {
 
             const stateText = isCurrentlyActive ? "disabled" : "enabled";
             const emb = new EmbedBuilder()
-                .setColor(client?.color?.number ?? ACCENT_COLOR)
+                .setColor(client?.color?.number ?? accentColor)
                 .setDescription(
                     `${client.emojiList.tick} | **Successfully ${stateText} filter \`${formatFilterName(directArg)}\` on the player.**`,
                 );
@@ -247,8 +247,8 @@ module.exports = {
 
         const collector = filterMessage.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIME,
-            idle: COLLECTOR_IDLE,
+            time: collectorTime,
+            idle: collectorIdle,
         });
 
         collector.on("collect", async (interaction) => {

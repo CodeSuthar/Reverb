@@ -1,4 +1,6 @@
-const { integer, pgTable, text, uniqueIndex } = require("drizzle-orm/pg-core");
+const {
+    integer, pgTable, text, uniqueIndex
+} = require("drizzle-orm/pg-core");
 const config = require("../../../config.reverb.js");
 
 const defaultPrefix = config.bot?.prefix || "r!";

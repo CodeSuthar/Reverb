@@ -1,4 +1,3 @@
-
 const {
     EmbedBuilder,
     ContainerBuilder,
@@ -16,17 +15,17 @@ const {
     convertMillisecondsToTime,
 } = require("../../../utils/musicUtils/index.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-const LYRICS_PER_PAGE = 12;
-const MAX_PAGE_LENGTH = 3000;
-const COLLECTOR_TIMEOUT = 120_000;
+const accentColor = 0xFF66C4;
+const lyricsPerPage = 12;
+const maxPageLength = 3000;
+const collectorTimeout = 120_000;
 
 module.exports = {
     name: "lyrics",
     description: "Shows lyrics for the currently playing music or a searched song.",
     usage: "[song name]",
     category: "music",
-    aliases: ["ly"],
+    aliases: ["ly", "lyric", "songlyrics", "findlyrics"],
 
     run: async (message, args, client, prefix) => {
         const guildPlayer = await client.musicManager.players.get(
@@ -233,7 +232,7 @@ module.exports = {
             let currentLength = 0;
 
             for (const line of lyricLines) {
-                const safeLine = line.slice(0, MAX_PAGE_LENGTH);
+                const safeLine = line.slice(0, maxPageLength);
                 const addedLength =
                     safeLine.length +
                     (currentLines.length > 0 ? 1 : 0);
@@ -241,8 +240,8 @@ module.exports = {
                 if (
                     currentLines.length > 0 &&
                     (
-                        currentLines.length >= LYRICS_PER_PAGE ||
-                        currentLength + addedLength > MAX_PAGE_LENGTH
+                        currentLines.length >= lyricsPerPage ||
+                        currentLength + addedLength > maxPageLength
                     )
                 ) {
                     pages.push(currentLines.join("\n"));
@@ -264,7 +263,7 @@ module.exports = {
             // Build the Component V2 lyrics container.
             const createContainer = (pageIndex, showButtons = true) => {
                 const container = new ContainerBuilder()
-                    .setAccentColor(client?.color?.number ?? ACCENT_COLOR);
+                    .setAccentColor(client?.color?.number ?? accentColor);
 
                 container.addTextDisplayComponents(
                     new TextDisplayBuilder().setContent(
@@ -363,7 +362,7 @@ module.exports = {
 
             const collector = lyricsMessage.createMessageComponentCollector({
                 componentType: ComponentType.Button,
-                time: COLLECTOR_TIMEOUT,
+                time: collectorTimeout,
                 idle: 60_000,
                 filter: (interaction) =>
                     interaction.user.id === message.author.id,

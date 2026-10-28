@@ -1,4 +1,6 @@
-const { DatabaseType } = require("./types");
+const {
+    DatabaseType
+} = require("./types");
 
 const MongoProvider = require("./providers/mongodb");
 const PostgresProvider = require("./providers/postgres");

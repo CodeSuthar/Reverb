@@ -1,5 +1,9 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
-const { parseTime, convertMillisecondsToTime, createProgressBar } = require("../../../utils/musicUtils/index");
+const {
+    EmbedBuilder, SlashCommandBuilder
+} = require("discord.js");
+const {
+    parseTime, convertMillisecondsToTime, createProgressBar
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

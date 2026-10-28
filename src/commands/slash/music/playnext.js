@@ -1,5 +1,9 @@
-const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits
+} = require("discord.js");
+const {
+    checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -18,6 +22,18 @@ module.exports = {
     run: async (client, interaction) => {
         await interaction.deferReply();
         let guildPlayer = await client.musicManager.players.get(interaction.guildId);
+        if (guildPlayer) {
+            const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+            if (isFairPlay) {
+                const emb = new EmbedBuilder()
+                    .setColor("Red")
+                    .setDescription(
+                        `${client.emojiList.cross} | **Songs cannot be inserted into the front of the queue while FairPlay is enabled. Please use the \`/play\` command to add tracks fairly.**`
+                    );
+                return await interaction.editReply({ embeds: [emb] });
+            }
+        }
+
         const voiceChannelToJoin = interaction.member.voice.channel;
         const songQuery = interaction.options.getString("song");
 

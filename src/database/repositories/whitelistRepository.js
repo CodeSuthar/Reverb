@@ -1,4 +1,6 @@
-const { eq } = require("drizzle-orm");
+const {
+    eq
+} = require("drizzle-orm");
 
 class whitelistRepository {
     /**

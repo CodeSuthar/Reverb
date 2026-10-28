@@ -1,6 +1,12 @@
-const { readdirSync } = require("fs");
-const { ApplicationCommandType, Routes } = require("discord.js");
-const { REST } = require("@discordjs/rest");
+const {
+    readdirSync
+} = require("fs");
+const {
+    ApplicationCommandType, Routes
+} = require("discord.js");
+const {
+    REST
+} = require("@discordjs/rest");
 const logger = require("../utils/logger");
 
 module.exports = async (client) => {

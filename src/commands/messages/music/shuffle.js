@@ -1,4 +1,6 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "shuffle",
@@ -28,7 +30,8 @@ module.exports = {
             });
         }
 
-        if (guildPlayer.get?.("fairplay")) {
+        const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+        if (isFairPlay) {
             let emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(

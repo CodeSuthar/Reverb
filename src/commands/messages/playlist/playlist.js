@@ -1,6 +1,13 @@
-const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
-const { decodeTrack } = require("moonlink.js/dist/src/Util");
-const { Track } = require("moonlink.js");
+const {
+    EmbedBuilder, 
+    PermissionFlagsBits
+} = require("discord.js");
+const {
+    decodeTrack
+} = require("moonlink.js/dist/src/Util");
+const {
+    Track
+} = require("moonlink.js");
 const {
     checkIfSearchResultIsPlaylist,
     convertMillisecondsToTime,
@@ -1295,7 +1302,9 @@ async function handleLoad(message, args, client, prefix) {
 
         // Resolve tracks (supports v4 objects and re-resolves legacy v3 tracks live)
         for (const raw of rawTracks) {
-            const { track, v4Data, wasReResolved } = await resolveTrackForPlayback(raw, client, message.author);
+            const {
+    track, v4Data, wasReResolved
+} = await resolveTrackForPlayback(raw, client, message.author);
             if (track) {
                 loadedTracks.push(track);
                 totalDurationMs += Number(track.duration || track.length || 0);
@@ -1608,7 +1617,7 @@ module.exports = {
     description: "Manage, play, and share your personal music playlists.",
     usage: "<create | delete | add | remove | list | load | steal | privacy> [arguments]",
     category: "playlist",
-    aliases: ["pl"],
+    aliases: ["pl", "playlists", "playlistmanager"],
     permissions: {
         client: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
     },

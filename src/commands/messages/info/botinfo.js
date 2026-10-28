@@ -6,9 +6,11 @@ const {
     ButtonBuilder,
     ButtonStyle,
 } = require("discord.js");
-const { version: moonlinkVersion } = require("moonlink.js");
+const {
+    version: moonlinkVersion
+} = require("moonlink.js");
 
-const GITHUB_REPO_URL = "https://github.com/CodeSuthar/Reverb";
+const githubRepositoryUrl = "https://github.com/CodeSuthar/Reverb";
 
 function formatBytes(bytes) {
     if (!bytes || bytes === 0) return "0 B";
@@ -91,7 +93,7 @@ module.exports = {
         const githubButton = new ButtonBuilder()
             .setLabel("GitHub Repository")
             .setStyle(ButtonStyle.Link)
-            .setURL(GITHUB_REPO_URL);
+            .setURL(githubRepositoryUrl);
 
         const row = new ActionRowBuilder().addComponents(inviteButton, supportButton, githubButton);
 
@@ -103,8 +105,8 @@ module.exports = {
             })
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setDescription(
-                `**[${botName}](${GITHUB_REPO_URL})** is an open-source Discord music bot engineered for modern communities.\n` +
-                `Source code available on [GitHub](${GITHUB_REPO_URL}).`,
+                `**[${botName}](${githubRepositoryUrl})** is an open-source Discord music bot engineered for modern communities.\n` +
+                `Source code available on [GitHub](${githubRepositoryUrl}).`,
             )
             .addFields([
                 {
@@ -143,7 +145,7 @@ module.exports = {
                 {
                     name: "Links & Resources",
                     value:
-                        `• **GitHub:** [CodeSuthar/Reverb](${GITHUB_REPO_URL})\n` +
+                        `• **GitHub:** [CodeSuthar/Reverb](${githubRepositoryUrl})\n` +
                         `• **Support:** [Community Discord Server](${supportUrl})\n` +
                         `• **Invite:** [Add ${botName} to your server](${inviteUrl})`,
                     inline: false,

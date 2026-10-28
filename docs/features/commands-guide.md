@@ -86,7 +86,7 @@ All filter commands require DJ privileges when DJ Mode is enabled:
 | `dj` | `add`, `remove`, `role`, `user`, `toggle`, `list`, `clear` | `r!dj add <@role\|@user>` / `/dj` | `ManageGuild` |
 | `setprefix` | `<new_prefix>` | `r!setprefix <prefix>` | `ManageGuild` |
 | `247` | `<enable\|disable>` | `r!247` / `/247` | `ManageGuild` |
-| `whitelist` | `toggle`, `channel`, `role`, `user`, `clear`, `list` | `r!whitelist add <#channel\|@role\|@user>` / `/whitelist` | `ManageGuild` |
+| `whitelist` | `add`, `remove`, `channel`, `role`, `user`, `toggle`, `list`, `clear` | `r!whitelist add <#channel\|@role\|@user>` / `/whitelist` | `ManageGuild` |
 
 ---
 

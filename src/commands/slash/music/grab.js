@@ -8,7 +8,9 @@ const {
     MessageFlags,
     SlashCommandBuilder,
 } = require("discord.js");
-const { convertMillisecondsToTime } = require("../../../utils/musicUtils");
+const {
+    convertMillisecondsToTime
+} = require("../../../utils/musicUtils");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

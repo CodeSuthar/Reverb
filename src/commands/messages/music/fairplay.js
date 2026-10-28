@@ -1,12 +1,16 @@
-
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
+const {
+    executeViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "fairplay",
     description: "Toggle FairPlay mode for the music queue.",
     usage: "",
     category: "music",
-    aliases: ["fp"],
+    aliases: ["fp", "fair", "fairp"],
     player: {
         voice: true,
         active: true,
@@ -17,13 +21,15 @@ module.exports = {
         let guildPlayer = await client.musicManager.players.get(message.guildId);
 
         try {
-            let isFairPlay = await guildPlayer.getData("fairplay");
-            console.log("Current FairPlay status:", isFairPlay);
+            let isFairPlay = Boolean((await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay"));
             let newFairPlay = !isFairPlay;
-            console.log("New FairPlay status:", newFairPlay);
 
             await guildPlayer.setData("fairplay", newFairPlay);
-            await guildPlayer.setFairPlay();
+            if (newFairPlay && typeof guildPlayer.setFairPlay === "function") {
+                await guildPlayer.setFairPlay();
+            }
+
+            await executeViewUpdate(client, guildPlayer);
 
             let emb = new EmbedBuilder()
                 .setColor(client?.color?.hex ?? "#FF66C4")
@@ -35,11 +41,7 @@ module.exports = {
                 embeds: [emb]
             });
         } catch (err) {
-            console.dir(err, { depth: null });
-
-            if (err.errors) {
-                console.dir(err.errors, { depth: null });
-            }
+            (client.logger || console).error(`[FAIRPLAY] Error toggling fairplay:`, err);
 
             let emb = new EmbedBuilder()
                 .setColor("Red")

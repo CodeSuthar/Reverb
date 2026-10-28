@@ -1,4 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
+const {
+    EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits, ChannelType
+} = require("discord.js");
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -13,6 +15,54 @@ module.exports = {
             sub
                 .setName("list")
                 .setDescription("View whitelist status, allowed channels, and bypass roles/users.")
+        )
+        .addSubcommand((sub) =>
+            sub
+                .setName("add")
+                .setDescription("Add an allowed command channel, bypass role, or bypass user.")
+                .addChannelOption((opt) =>
+                    opt
+                        .setName("channel")
+                        .setDescription("The text channel to allow commands in")
+                        .setRequired(false)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                )
+                .addRoleOption((opt) =>
+                    opt
+                        .setName("role")
+                        .setDescription("The role to grant bypass permissions")
+                        .setRequired(false)
+                )
+                .addUserOption((opt) =>
+                    opt
+                        .setName("user")
+                        .setDescription("The user to grant bypass permissions")
+                        .setRequired(false)
+                )
+        )
+        .addSubcommand((sub) =>
+            sub
+                .setName("remove")
+                .setDescription("Remove an allowed command channel, bypass role, or bypass user.")
+                .addChannelOption((opt) =>
+                    opt
+                        .setName("channel")
+                        .setDescription("The text channel to remove from allowed channels")
+                        .setRequired(false)
+                        .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+                )
+                .addRoleOption((opt) =>
+                    opt
+                        .setName("role")
+                        .setDescription("The role to remove from bypass roles")
+                        .setRequired(false)
+                )
+                .addUserOption((opt) =>
+                    opt
+                        .setName("user")
+                        .setDescription("The user to remove from bypass users")
+                        .setRequired(false)
+                )
         )
         .addSubcommand((sub) =>
             sub
@@ -106,16 +156,28 @@ module.exports = {
         try {
             switch (subCommand) {
                 case "toggle": {
-                    const current = await client.database.getWhitelist(guildId);
-                    const newMode = !current.mode;
+                    const whitelist = await client.database.getWhitelist(guildId);
+                    const hasChannels = whitelist && whitelist.channels && whitelist.channels.length > 0;
+
+                    if (!hasChannels && !whitelist?.mode) {
+                        const emb = new EmbedBuilder()
+                            .setColor("Red")
+                            .setDescription(
+                                `${client.emojiList.cross} | No allowed command channels are configured yet. Please add a channel first using \`/whitelist add\` or \`/whitelist channel\`.`
+                            );
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    const currentMode = whitelist ? Boolean(whitelist.mode) : false;
+                    const newMode = !currentMode;
                     await client.database.setWhitelistMode(guildId, newMode);
 
                     const emb = new EmbedBuilder()
                         .setColor(newMode ? (client?.color?.hex ?? "#FF66C4") : "Red")
                         .setDescription(
-                            `**${newMode ? client.emojiList.tick : client.emojiList.cross} | Command restriction system has been \`${newMode ? "enabled" : "disabled"}\` for this server.**\n` +
-                            (newMode && (!current.channels || current.channels.length === 0)
-                                ? `⚠️ **Notice:** No allowed channels are configured yet. Use \`/whitelist channel action:Add\` so members can run commands.`
+                            `**${newMode ? client.emojiList.tick : client.emojiList.cross} | Command restriction system has been \`${newMode ? "enabled" : "disabled"}\` for this server.**` +
+                            (newMode && !hasChannels
+                                ? `\n\n${client.emojiList.warning} **Notice:** No allowed channels are configured yet! Use \`/whitelist add\` so members can run commands.`
                                 : "")
                         )
                         .setTimestamp();
@@ -123,31 +185,163 @@ module.exports = {
                     return await interaction.editReply({ embeds: [emb] });
                 }
 
+                case "add": {
+                    const channel = interaction.options.getChannel("channel");
+                    const role = interaction.options.getRole("role");
+                    const user = interaction.options.getUser("user");
+
+                    if (!channel && !role && !user) {
+                        const emb = new EmbedBuilder()
+                            .setColor("Red")
+                            .setDescription(`${client.emojiList.cross} | **Please provide a channel, role, or user to add.**`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    const whitelist = await client.database.getWhitelist(guildId);
+
+                    if (channel) {
+                        if (whitelist && whitelist.channels && whitelist.channels.includes(channel.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The channel ${channel} is already configured as an allowed command channel.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistChannel(guildId, channel.id);
+                        await client.database.setWhitelistMode(guildId, true);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${channel} as an allowed command channel and **enabled** command restrictions.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    if (role) {
+                        if (whitelist && whitelist.roles && whitelist.roles.includes(role.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The role ${role} is already configured as a bypass role.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistRole(guildId, role.id);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${role} as a bypass role. Members with this role can run commands anywhere.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    if (user) {
+                        if (whitelist && whitelist.users && whitelist.users.includes(user.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The user ${user} is already configured as a bypass user.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistUser(guildId, user.id);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${user} as a bypass user. This user can run commands in any channel.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+                    break;
+                }
+
+                case "remove": {
+                    const channel = interaction.options.getChannel("channel");
+                    const role = interaction.options.getRole("role");
+                    const user = interaction.options.getUser("user");
+
+                    if (!channel && !role && !user) {
+                        const emb = new EmbedBuilder()
+                            .setColor("Red")
+                            .setDescription(`${client.emojiList.cross} | **Please provide a channel, role, or user to remove.**`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    const whitelist = await client.database.getWhitelist(guildId);
+
+                    if (channel) {
+                        if (!whitelist || !whitelist.channels || !whitelist.channels.includes(channel.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The channel ${channel} is not configured as an allowed command channel.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistChannel(guildId, channel.id);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${channel} from allowed command channels.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    if (role) {
+                        if (!whitelist || !whitelist.roles || !whitelist.roles.includes(role.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The role ${role} is not configured as a bypass role.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistRole(guildId, role.id);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${role} from bypass roles.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+
+                    if (user) {
+                        if (!whitelist || !whitelist.users || !whitelist.users.includes(user.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The user ${user} is not configured as a bypass user.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistUser(guildId, user.id);
+                        const emb = new EmbedBuilder()
+                            .setColor(client?.color?.hex ?? "#FF66C4")
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${user} from bypass users.`);
+                        return await interaction.editReply({ embeds: [emb] });
+                    }
+                    break;
+                }
+
                 case "channel": {
                     const action = interaction.options.getString("action");
                     const channel = interaction.options.getChannel("target");
+                    const whitelist = await client.database.getWhitelist(guildId);
 
                     if (action === "add") {
-                        const added = await client.database.addWhitelistChannel(guildId, channel.id);
+                        if (whitelist && whitelist.channels && whitelist.channels.includes(channel.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The channel ${channel} is already configured as an allowed command channel.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistChannel(guildId, channel.id);
                         await client.database.setWhitelistMode(guildId, true);
 
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(added
-                                ? `${client.emojiList.tick} | Successfully added ${channel} as an allowed command channel and **enabled** command restrictions.`
-                                : `${client.emojiList.cross} | Channel ${channel} is already in the allowed command channels list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${channel} as an allowed command channel and **enabled** command restrictions.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
 
                     if (action === "remove") {
-                        const removed = await client.database.removeWhitelistChannel(guildId, channel.id);
+                        if (!whitelist || !whitelist.channels || !whitelist.channels.includes(channel.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The channel ${channel} is not configured as an allowed command channel.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistChannel(guildId, channel.id);
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(removed
-                                ? `${client.emojiList.tick} | Successfully removed ${channel} from allowed command channels.`
-                                : `${client.emojiList.cross} | Channel ${channel} is not in the allowed channels list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${channel} from allowed command channels.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
                     break;
@@ -156,26 +350,35 @@ module.exports = {
                 case "role": {
                     const action = interaction.options.getString("action");
                     const role = interaction.options.getRole("target");
+                    const whitelist = await client.database.getWhitelist(guildId);
 
                     if (action === "add") {
-                        const added = await client.database.addWhitelistRole(guildId, role.id);
+                        if (whitelist && whitelist.roles && whitelist.roles.includes(role.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The role ${role} is already configured as a bypass role.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistRole(guildId, role.id);
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(added
-                                ? `${client.emojiList.tick} | Successfully added ${role} as a bypass role. Members with this role can run commands anywhere.`
-                                : `${client.emojiList.cross} | Role ${role} is already in the bypass roles list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${role} as a bypass role. Members with this role can run commands anywhere.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
 
                     if (action === "remove") {
-                        const removed = await client.database.removeWhitelistRole(guildId, role.id);
+                        if (!whitelist || !whitelist.roles || !whitelist.roles.includes(role.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The role ${role} is not configured as a bypass role.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistRole(guildId, role.id);
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(removed
-                                ? `${client.emojiList.tick} | Successfully removed ${role} from bypass roles.`
-                                : `${client.emojiList.cross} | Role ${role} is not in the bypass roles list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${role} from bypass roles.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
                     break;
@@ -184,26 +387,35 @@ module.exports = {
                 case "user": {
                     const action = interaction.options.getString("action");
                     const user = interaction.options.getUser("target");
+                    const whitelist = await client.database.getWhitelist(guildId);
 
                     if (action === "add") {
-                        const added = await client.database.addWhitelistUser(guildId, user.id);
+                        if (whitelist && whitelist.users && whitelist.users.includes(user.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The user ${user} is already configured as a bypass user.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.addWhitelistUser(guildId, user.id);
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(added
-                                ? `${client.emojiList.tick} | Successfully added ${user} as a bypass user. This user can run commands in any channel.`
-                                : `${client.emojiList.cross} | User ${user} is already in the bypass users list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully added ${user} as a bypass user. This user can run commands in any channel.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
 
                     if (action === "remove") {
-                        const removed = await client.database.removeWhitelistUser(guildId, user.id);
+                        if (!whitelist || !whitelist.users || !whitelist.users.includes(user.id)) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | The user ${user} is not configured as a bypass user.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+
+                        await client.database.removeWhitelistUser(guildId, user.id);
                         const emb = new EmbedBuilder()
                             .setColor(client?.color?.hex ?? "#FF66C4")
-                            .setDescription(removed
-                                ? `${client.emojiList.tick} | Successfully removed ${user} from bypass users.`
-                                : `${client.emojiList.cross} | User ${user} is not in the bypass users list.`
-                            );
+                            .setDescription(`${client.emojiList.tick} | Successfully removed ${user} from bypass users.`);
                         return await interaction.editReply({ embeds: [emb] });
                     }
                     break;
@@ -211,6 +423,41 @@ module.exports = {
 
                 case "clear": {
                     const clearType = interaction.options.getString("type");
+                    const whitelist = await client.database.getWhitelist(guildId);
+
+                    if (clearType === "channels") {
+                        if (!whitelist || !whitelist.channels || whitelist.channels.length === 0) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | There are no allowed command channels configured for this server.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+                    } else if (clearType === "roles") {
+                        if (!whitelist || !whitelist.roles || whitelist.roles.length === 0) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | There are no bypass roles configured for this server.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+                    } else if (clearType === "users") {
+                        if (!whitelist || !whitelist.users || whitelist.users.length === 0) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | There are no bypass users configured for this server.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+                    } else if (clearType === "all") {
+                        const hasChannels = whitelist && whitelist.channels && whitelist.channels.length > 0;
+                        const hasRoles = whitelist && whitelist.roles && whitelist.roles.length > 0;
+                        const hasUsers = whitelist && whitelist.users && whitelist.users.length > 0;
+                        if (!hasChannels && !hasRoles && !hasUsers && !whitelist?.mode) {
+                            const emb = new EmbedBuilder()
+                                .setColor("Red")
+                                .setDescription(`${client.emojiList.cross} | There are no whitelist settings configured for this server.`);
+                            return await interaction.editReply({ embeds: [emb] });
+                        }
+                    }
+
                     await client.database.clearWhitelist(guildId, clearType);
 
                     const labels = {
@@ -250,7 +497,7 @@ module.exports = {
                             `Control where users can run bot commands and configure who can bypass restrictions.\n` +
                             `Status: **${isEnabled ? `${client.emojiList.enabled} Enabled` : `${client.emojiList.disabled} Disabled`}**\n\n` +
                             (isEnabled && (!whitelist.channels || whitelist.channels.length === 0)
-                                ? `${client.emojiList.warning} **Warning:** System is enabled but no channels are whitelisted yet! Use \`/whitelist channel\` to allow a channel.\n\n`
+                                ? `${client.emojiList.warning} **Warning:** System is enabled but no channels are whitelisted yet! Use \`/whitelist add\` or \`/whitelist channel\` to allow a channel.\n\n`
                                 : "")
                         )
                         .addFields(

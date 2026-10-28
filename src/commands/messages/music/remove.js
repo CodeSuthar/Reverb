@@ -1,5 +1,6 @@
-
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 const {
     convertMillisecondsToTime
@@ -10,7 +11,7 @@ module.exports = {
     description: "Remove a song from the queue.",
     usage: "<song number>",
     category: "music",
-    aliases: ["rm"],
+    aliases: ["r", "rm", "rem", "del", "delete", "erase", "removesong"],
     player: {
         voice: true,
         active: true,

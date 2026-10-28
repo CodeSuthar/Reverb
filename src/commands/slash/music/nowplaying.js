@@ -6,7 +6,9 @@ const {
     ThumbnailBuilder,
     SlashCommandBuilder,
 } = require("discord.js");
-const { convertMillisecondsToTime, createProgressBar } = require("../../../utils/musicUtils/index.js");
+const {
+    convertMillisecondsToTime, createProgressBar
+} = require("../../../utils/musicUtils/index.js");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

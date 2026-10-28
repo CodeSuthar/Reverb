@@ -1,4 +1,6 @@
-const { MessageFlags, ComponentType } = require("discord.js");
+const {
+    MessageFlags
+} = require("discord.js");
 const {
     CATEGORY_ORDER,
     shouldDisplayDeveloper,
@@ -6,8 +8,8 @@ const {
     buildCommandDetailView,
 } = require("../../../utils/buildHelpView");
 
-const COLLECTOR_TIME = 90_000;
-const COLLECTOR_IDLE = 45_000;
+const collectorTime = 90_000;
+const collectorIdle = 45_000;
 
 module.exports = {
     name: "help",
@@ -27,8 +29,8 @@ module.exports = {
 
             // Handle "Back to Help Menu" button interaction if clicked
             const backCollector = replyMessage.createMessageComponentCollector({
-                time: COLLECTOR_TIME,
-                idle: COLLECTOR_IDLE,
+                time: collectorTime,
+                idle: collectorIdle,
             });
 
             backCollector.on("collect", async (interaction) => {
@@ -78,8 +80,8 @@ function setupMainCollector(msg, authorId, client, prefix, isDeveloper) {
     );
 
     const collector = msg.createMessageComponentCollector({
-        time: COLLECTOR_TIME,
-        idle: COLLECTOR_IDLE,
+        time: collectorTime,
+        idle: collectorIdle,
     });
 
     collector.on("collect", async (interaction) => {

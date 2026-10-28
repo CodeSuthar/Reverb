@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "loop",
     description: "Loop the currently playing track or queue.",
     usage: "",
     category: "music",
-    aliases: [],
+    aliases: ["l", "repeat"],
     player: {
         voice: true,
         active: true,

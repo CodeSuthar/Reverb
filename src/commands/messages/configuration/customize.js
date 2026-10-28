@@ -1,5 +1,9 @@
-const { PermissionFlagsBits, MessageFlags } = require("discord.js");
-const { buildCustomizeView, attachCustomizeCollector } = require("../../../utils/buildCustomizeView");
+const {
+    PermissionFlagsBits, MessageFlags
+} = require("discord.js");
+const {
+    buildCustomizeView, attachCustomizeCollector
+} = require("../../../utils/buildCustomizeView");
 
 module.exports = {
     name: "customize",

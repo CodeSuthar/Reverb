@@ -7,8 +7,12 @@ const {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } = require("discord.js");
-const { decodeTrack } = require("moonlink.js/dist/src/Util");
-const { checkIfSearchResultIsPlaylist, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    decodeTrack
+} = require("moonlink.js/dist/src/Util");
+const {
+    checkIfSearchResultIsPlaylist, convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
 const MAX_PLAYLIST_NAME_LENGTH = 50;
 

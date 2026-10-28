@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "autoplay",
     description: "Toggle autoplay for the music player.",
     usage: "",
     category: "music",
-    aliases: ["ap"],
+    aliases: ["ap", "auto", "autop"],
     player: {
         voice: true,
         active: true,

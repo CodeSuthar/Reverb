@@ -1,5 +1,9 @@
-const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits
+} = require("discord.js");
+const {
+    checkIfURIIsYoutubeBased, checkIfSearchResultIsPlaylist, convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

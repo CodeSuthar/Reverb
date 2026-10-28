@@ -4,7 +4,9 @@ const {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } = require("discord.js");
-const { buildSetupView } = require("../../../utils/buildSetupView");
+const {
+    buildSetupView
+} = require("../../../utils/buildSetupView");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

@@ -15,9 +15,11 @@ const {
 } = require("discord.js");
 const path = require("path");
 const fs = require("fs");
-const { convertMillisecondsToTime } = require("./musicUtils/functions.js");
+const {
+    convertMillisecondsToTime
+} = require("./musicUtils/functions.js");
 
-const ACCENT_COLOR = 0xFF66C4;
+const accentColor = 0xFF66C4;
 const DEFAULT_BANNER_PATH = path.resolve(__dirname, "../../docs/public/Reverb-Banner.png");
 const BANNER_ATTACHMENT_NAME = "Reverb-Banner.png";
 
@@ -94,7 +96,7 @@ function getSetupButtons(player = null, client = null) {
  * @returns {ContainerBuilder} The constructed Components V2 ContainerBuilder.
  */
 function buildSetupContainer(client, player = null, options = {}) {
-    const accentColor = client?.color?.number ?? ACCENT_COLOR;
+    const accentColor = client?.color?.number ?? accentColor;
     const container = new ContainerBuilder()
         .setAccentColor(accentColor);
 
@@ -314,7 +316,7 @@ function getSetupEmbed(client, player = null, options = {}) {
     const botName = client?.config?.bot?.name || client?.user?.username || "Reverb";
     const statusLabel = isPaused ? " [Paused]" : "";
     const embed = new EmbedBuilder()
-        .setColor(client?.color?.hex ?? ACCENT_COLOR)
+        .setColor(client?.color?.hex ?? accentColor)
         .setAuthor({
             name: `${botName} | Song Request Channel${statusLabel}`,
             iconURL: client?.user?.displayAvatarURL?.() || undefined,
@@ -378,6 +380,6 @@ buildSetupView.getSetupButtons = getSetupButtons;
 buildSetupView.getSetupEmbed = getSetupEmbed;
 buildSetupView.DEFAULT_BANNER_PATH = DEFAULT_BANNER_PATH;
 buildSetupView.BANNER_ATTACHMENT_NAME = BANNER_ATTACHMENT_NAME;
-buildSetupView.ACCENT_COLOR = ACCENT_COLOR;
+buildSetupView.accentColor = accentColor;
 
 module.exports = buildSetupView;

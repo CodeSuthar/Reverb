@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "resume",
     description: "Resume the currently playing music.",
     usage: "",
     category: "music",
-    aliases: [],
+    aliases: ["unpause"],
     player: {
         voice: true,
         active: true,

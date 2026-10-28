@@ -1,4 +1,3 @@
-
 const {
     EmbedBuilder,
     PermissionFlagsBits,
@@ -25,7 +24,7 @@ module.exports = {
     description: "Search for a song.",
     usage: "<song name or URL>",
     category: "music",
-    aliases: [],
+    aliases: ["find", "lookup", "searchsong"],
     permissions: {
         client: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
     },

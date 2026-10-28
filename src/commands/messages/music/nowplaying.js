@@ -1,12 +1,28 @@
-const { EmbedBuilder, AttachmentBuilder, ContainerBuilder, TextDisplayBuilder, SectionBuilder, ThumbnailBuilder, ImageBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, MessageFlags } = require("discord.js");
-const { convertMillisecondsToTime, createProgressBar, createSpotifyCard } = require("../../../utils/musicUtils/index.js");
+const {
+    EmbedBuilder, 
+    AttachmentBuilder, 
+    ContainerBuilder, 
+    TextDisplayBuilder, 
+    SectionBuilder, 
+    ThumbnailBuilder,
+    ImageBuilder, 
+    MediaGalleryBuilder, 
+    MediaGalleryItemBuilder, 
+    MessageFlags
+} = require("discord.js");
+
+const {
+    convertMillisecondsToTime, 
+    createProgressBar, 
+    createSpotifyCard
+} = require("../../../utils/musicUtils/index.js");
 
 module.exports = {
     name: "nowplaying",
     description: "Show the currently playing music.",
     usage: "",
     category: "music",
-    aliases: ["np"],
+    aliases: ["np", "current", "playing", "now", "song"],
     player: {
         active: true,
         playing: true,

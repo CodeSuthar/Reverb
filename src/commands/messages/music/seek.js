@@ -1,4 +1,6 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 const {
     parseTime,
@@ -11,7 +13,7 @@ module.exports = {
     description: "Seek to a specific position in the current song or relative to the current position.",
     usage: "<[+|-]duration | ahead <time> | behind <time>>",
     category: "music",
-    aliases: ["s", "ff", "rwd", "forward", "rewind"],
+    aliases: ["ff", "rwd", "forward", "rewind"],
     player: {
         voice: true,
         active: true,

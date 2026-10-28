@@ -1,5 +1,9 @@
 
-const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
+const {
+    EmbedBuilder, 
+    PermissionFlagsBits
+} = require("discord.js");
+
 const {
     checkIfURIIsYoutubeBased,
     checkIfSearchResultIsPlaylist,
@@ -11,7 +15,7 @@ module.exports = {
     description: "Play a song next in the queue.",
     usage: "<song name or URL>",
     category: "music",
-    aliases: ["pn"],
+    aliases: ["pn", "playn"],
     permissions: {
         client: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
     },
@@ -32,6 +36,21 @@ module.exports = {
             return message.reply({
                 embeds: [emb],
             });
+        }
+
+        if (guildPlayer) {
+            const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+            if (isFairPlay) {
+                let emb = new EmbedBuilder()
+                    .setColor("Red")
+                    .setDescription(
+                        `${client.emojiList.cross} | **Songs cannot be inserted into the front of the queue while FairPlay is enabled. Please use the \`play\` command to add tracks fairly.**`,
+                    );
+
+                return message.reply({
+                    embeds: [emb],
+                });
+            }
         }
 
         let voiceChannelToJoin = message.member.voice.channel;

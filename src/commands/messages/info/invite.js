@@ -5,7 +5,7 @@ const {
     ButtonStyle,
 } = require("discord.js");
 
-const GITHUB_REPO_URL = "https://github.com/CodeSuthar/Reverb";
+const githubRepositoryUrl = "https://github.com/CodeSuthar/Reverb";
 
 module.exports = {
     name: "invite",
@@ -33,7 +33,7 @@ module.exports = {
         const githubButton = new ButtonBuilder()
             .setLabel("GitHub Repository")
             .setStyle(ButtonStyle.Link)
-            .setURL(GITHUB_REPO_URL);
+            .setURL(githubRepositoryUrl);
 
         const row = new ActionRowBuilder().addComponents(inviteButton, supportButton, githubButton);
 
@@ -60,7 +60,7 @@ module.exports = {
                 },
                 {
                     name: "GitHub Repository",
-                    value: `[Source Code](${GITHUB_REPO_URL})`,
+                    value: `[Source Code](${githubRepositoryUrl})`,
                     inline: true,
                 },
             ])

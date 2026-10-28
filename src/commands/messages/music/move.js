@@ -28,6 +28,19 @@ module.exports = {
             });
         }
 
+        const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+        if (isFairPlay) {
+            let emb = new EmbedBuilder()
+                .setColor("Red")
+                .setDescription(
+                    `${client.emojiList.cross} | **The queue cannot be rearranged while FairPlay is enabled.**`,
+                );
+
+            return message.reply({
+                embeds: [emb]
+            });
+        }
+
         let from;
         let to;
 

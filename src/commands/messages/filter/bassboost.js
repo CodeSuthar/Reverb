@@ -1,13 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
-
-const ACCENT_COLOR = 0xFF66C4;
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "bassboost",
     description: "Adjust the bass boost audio filter level.",
     usage: "[low | medium | high | off]",
     category: "filter",
-    aliases: ["bb", "bass"],
+    aliases: ["bb", "bass", "bassboostfilter", "bassboostsound"],
     player: {
         voice: true,
         active: true,

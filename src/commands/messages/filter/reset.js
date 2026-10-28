@@ -1,6 +1,6 @@
-const { EmbedBuilder } = require("discord.js");
-
-const ACCENT_COLOR = 0xFF66C4;
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "reset",

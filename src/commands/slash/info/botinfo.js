@@ -7,9 +7,11 @@ const {
     ButtonStyle,
     SlashCommandBuilder,
 } = require("discord.js");
-const { version: moonlinkVersion } = require("moonlink.js");
+const {
+    version: moonlinkVersion
+} = require("moonlink.js");
 
-const GITHUB_REPO_URL = "https://github.com/CodeSuthar/Reverb";
+const githubRepositoryUrl = "https://github.com/CodeSuthar/Reverb";
 
 function formatBytes(bytes) {
     if (!bytes || bytes === 0) return "0 B";
@@ -129,7 +131,7 @@ module.exports = {
             new ButtonBuilder()
                 .setLabel("GitHub Repository")
                 .setStyle(ButtonStyle.Link)
-                .setURL(GITHUB_REPO_URL)
+                .setURL(githubRepositoryUrl)
         );
 
         return await interaction.editReply({

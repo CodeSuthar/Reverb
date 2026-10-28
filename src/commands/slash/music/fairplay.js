@@ -1,4 +1,9 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const {
+    EmbedBuilder, SlashCommandBuilder
+} = require("discord.js");
+const {
+    executeViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -15,11 +20,15 @@ module.exports = {
         const guildPlayer = await client.musicManager.players.get(interaction.guildId);
 
         try {
-            const isFairPlay = await guildPlayer.getData("fairplay");
+            const isFairPlay = Boolean((await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay"));
             const newFairPlay = !isFairPlay;
 
             await guildPlayer.setData("fairplay", newFairPlay);
-            await guildPlayer.setFairPlay();
+            if (newFairPlay && typeof guildPlayer.setFairPlay === "function") {
+                await guildPlayer.setFairPlay();
+            }
+
+            await executeViewUpdate(client, guildPlayer);
 
             const emb = new EmbedBuilder()
                 .setColor(client?.color?.hex ?? "#FF66C4")
@@ -29,7 +38,7 @@ module.exports = {
 
             return await interaction.editReply({ embeds: [emb] });
         } catch (err) {
-            console.error(err);
+            (client.logger || console).error(`[FAIRPLAY] Error toggling fairplay:`, err);
             const emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(

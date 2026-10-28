@@ -1,4 +1,6 @@
-const { Schema, model, models } = require("mongoose");
+const {
+    Schema, model, models
+} = require("mongoose");
 
 const staySchema = new Schema(
     {

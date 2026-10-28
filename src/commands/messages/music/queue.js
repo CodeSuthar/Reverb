@@ -11,14 +11,13 @@ const {
     ComponentType,
     MessageFlags,
 } = require("discord.js");
-
 const {
     convertMillisecondsToTime,
 } = require("../../../utils/musicUtils/index");
 
-const ACCENT_COLOR = 0xFF66C4;
-const TRACKS_PER_PAGE = 5;
-const COLLECTOR_TIMEOUT = 120_000;
+const accentColor = 0xFF66C4;
+const tracksPerPage = 5;
+const collectorTimeout = 120_000;
 
 module.exports = {
     name: "queue",
@@ -57,7 +56,7 @@ module.exports = {
 
         const maxPages = Math.max(
             1,
-            Math.ceil(queuedTracks.length / TRACKS_PER_PAGE),
+            Math.ceil(queuedTracks.length / tracksPerPage),
         );
 
         let currentPage = 0;
@@ -78,7 +77,7 @@ module.exports = {
 
         const collector = queueMessage.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIMEOUT,
+            time: collectorTimeout,
             idle: 60_000,
             filter: (interaction) =>
                 interaction.user.id === message.author.id,
@@ -198,7 +197,7 @@ function buildQueueView({
     showButtons = true,
 }) {
     const container = new ContainerBuilder()
-        .setAccentColor(client?.color?.number ?? ACCENT_COLOR);
+        .setAccentColor(client?.color?.number ?? accentColor);
 
     container.addTextDisplayComponents(
         new TextDisplayBuilder().setContent(
@@ -258,15 +257,15 @@ function buildQueueView({
             ),
         );
     } else {
-        const offset = currentPage * TRACKS_PER_PAGE;
+        const offset = currentPage * tracksPerPage;
         const visibleTracks = queuedTracks.slice(
             offset,
-            offset + TRACKS_PER_PAGE,
+            offset + tracksPerPage,
         );
 
         container.addTextDisplayComponents(
             new TextDisplayBuilder().setContent(
-                `### Up Next${queuedTracks.length > TRACKS_PER_PAGE ? ` • Page ${currentPage + 1}` : ""}`,
+                `### Up Next${queuedTracks.length > tracksPerPage ? ` • Page ${currentPage + 1}` : ""}`,
             ),
         );
 

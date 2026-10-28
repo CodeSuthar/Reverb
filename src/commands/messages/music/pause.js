@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "pause",
     description: "Pause the currently playing music.",
     usage: "",
     category: "music",
-    aliases: [],
+    aliases: ["hold"],
     player: {
         voice: true,
         active: true,

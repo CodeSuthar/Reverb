@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "leave",
     description: "Make the bot leave your voice channel.",
     usage: "",
     category: "music",
-    aliases: ["disconnect", "dc"],
+    aliases: ["dc", "disconnect"],
     player: {
         voice: true,
         active: true,

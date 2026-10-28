@@ -1,5 +1,7 @@
 const mysql = require("mysql2/promise");
-const { drizzle } = require("drizzle-orm/mysql2");
+const {
+    drizzle
+} = require("drizzle-orm/mysql2");
 const schemas = require("../schemas/mysql");
 
 const botRepository = require("../repositories/botRepository");

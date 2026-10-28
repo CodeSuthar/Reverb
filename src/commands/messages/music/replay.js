@@ -1,4 +1,6 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 const {
     convertMillisecondsToTime
@@ -9,7 +11,7 @@ module.exports = {
     description: "Replay the current song from the beginning.",
     usage: "",
     category: "music",
-    aliases: ["rp"],
+    aliases: ["rp", "replaytrack", "replaycurrent"],
     player: {
         voice: true,
         active: true,

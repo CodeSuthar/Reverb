@@ -1,4 +1,6 @@
-const { updateVoiceStatus, executeViewUpdate } = require("../../../utils/musicUtils/index");
+const {
+    updateVoiceStatus, executeViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "playerTriggeredStop",

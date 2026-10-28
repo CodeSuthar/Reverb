@@ -11,7 +11,9 @@ module.exports = {
             let twentyFourSevenList = await client.database.getTwentyFourSeven();
             if (twentyFourSevenList && twentyFourSevenList.length > 0) {
                 for (const stayData of twentyFourSevenList) {
-                    const { guildId, textChannelId, voiceChannelId } = stayData;
+                    const {
+    guildId, textChannelId, voiceChannelId
+} = stayData;
 
                     let guild = client.guilds.cache.get(guildId) || await client.guilds.fetch(guildId).catch(() => null);
                     if (!guild) {
@@ -58,7 +60,9 @@ module.exports = {
             let setupList = await client.database.getSetup();
             if (setupList && setupList.length > 0) {
                 for (const setupData of setupList) {
-                    const { guildId, textChannelId } = setupData;
+                    const {
+    guildId, textChannelId
+} = setupData;
 
                     let guild = client.guilds.cache.get(guildId) || await client.guilds.fetch(guildId).catch(() => null);
                     if (!guild) {

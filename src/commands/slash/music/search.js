@@ -8,7 +8,9 @@ const {
     ComponentType,
     SlashCommandBuilder,
 } = require("discord.js");
-const { checkIfURIIsYoutubeBased, convertMillisecondsToTime } = require("../../../utils/musicUtils/index");
+const {
+    checkIfURIIsYoutubeBased, convertMillisecondsToTime
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     slashData: new SlashCommandBuilder()

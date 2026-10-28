@@ -1,11 +1,14 @@
-const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
+const {
+    EmbedBuilder, 
+    PermissionFlagsBits
+} = require("discord.js");
 
 module.exports = {
     name: "join",
     description: "Make the bot join your voice channel to play music.",
     usage: "",
     category: "music",
-    aliases: ["j"],
+    aliases: ["j", "summon", "joinvoice", "connect"],
     permissions: {
         client: [PermissionFlagsBits.Connect, PermissionFlagsBits.Speak],
     },

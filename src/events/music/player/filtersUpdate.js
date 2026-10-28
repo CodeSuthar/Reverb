@@ -1,4 +1,6 @@
-const { queueViewUpdate } = require("../../../utils/musicUtils/index");
+const {
+    queueViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "filtersUpdate",

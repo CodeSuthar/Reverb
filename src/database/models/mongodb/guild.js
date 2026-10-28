@@ -1,4 +1,6 @@
-const { Schema, model, models } = require("mongoose");
+const {
+    Schema, model, models
+} = require("mongoose");
 let config = require("../../../../config.reverb.js");
 
 const guildSchema = new Schema(

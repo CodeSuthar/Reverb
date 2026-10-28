@@ -1,4 +1,6 @@
-const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
+const {
+    EmbedBuilder, PermissionFlagsBits
+} = require("discord.js");
 
 const REQUIRED_PERMISSIONS = [
     PermissionFlagsBits.SendMessages,

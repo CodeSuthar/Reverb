@@ -1,4 +1,6 @@
-const { createCanvas, loadImage, GlobalFonts } = require("@napi-rs/canvas");
+const {
+    createCanvas, loadImage, GlobalFonts
+} = require("@napi-rs/canvas");
 
 function checkIfSearchResultIsPlaylist(searchResult) {
     if (searchResult.isPlaylist) return true;

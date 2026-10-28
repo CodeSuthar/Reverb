@@ -6,9 +6,8 @@ const {
     ComponentType,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-const ITEMS_PER_PAGE = 10;
-const COLLECTOR_TIMEOUT = 120_000;
+const itemsPerPage = 10;
+const collectorTimeout = 120_000;
 
 module.exports = {
     name: "guildlist",
@@ -60,14 +59,14 @@ module.exports = {
 
         const totalGuilds = allGuilds.length;
         const totalMembers = allGuilds.reduce((acc, g) => acc + g.memberCount, 0);
-        const maxPages = Math.ceil(totalGuilds / ITEMS_PER_PAGE);
+        const maxPages = Math.ceil(totalGuilds / itemsPerPage);
         let currentPage = 0;
 
         const botName = client?.config?.bot?.name || client?.user?.username || "Reverb";
 
         const buildPageEmbed = (page) => {
-            const start = page * ITEMS_PER_PAGE;
-            const currentSlice = allGuilds.slice(start, start + ITEMS_PER_PAGE);
+            const start = page * itemsPerPage;
+            const currentSlice = allGuilds.slice(start, start + itemsPerPage);
 
             const lines = currentSlice.map((g, index) => {
                 const absoluteIndex = start + index + 1;
@@ -124,7 +123,7 @@ module.exports = {
 
         const collector = replyMessage.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIMEOUT,
+            time: collectorTimeout,
             filter: (interaction) => interaction.user.id === message.author.id,
         });
 

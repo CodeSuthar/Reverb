@@ -1,4 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const {
+    EmbedBuilder, SlashCommandBuilder
+} = require("discord.js");
 
 const BASS_LEVELS = ["bassboost-low", "bassboost-medium", "bassboost-high"];
 

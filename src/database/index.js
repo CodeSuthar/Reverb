@@ -1,5 +1,7 @@
 const DatabaseManager = require("./DatabaseManager");
-const { DatabaseType } = require("./types");
+const {
+    DatabaseType
+} = require("./types");
 
 // Providers
 const MongoProvider = require("./providers/mongodb");

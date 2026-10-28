@@ -1,4 +1,6 @@
-const { int, mysqlTable, text, uniqueIndex, varchar } = require("drizzle-orm/mysql-core");
+const {
+    int, mysqlTable, text, uniqueIndex, varchar
+} = require("drizzle-orm/mysql-core");
 const config = require("../../../config.reverb.js");
 
 const defaultPrefix = config.bot?.prefix || "r!";

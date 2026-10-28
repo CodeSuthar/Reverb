@@ -1,4 +1,6 @@
-const { Player } = require("moonlink.js");
+const {
+    Player
+} = require("moonlink.js");
 
 class reverbPlayer extends Player {
     constructor(manager, node, config) {
@@ -20,6 +22,14 @@ class reverbPlayer extends Player {
 
     async getData(key) {
         return this._playerData.get(key);
+    }
+
+    get(key) {
+        return this._playerData.get(key);
+    }
+
+    set(key, value) {
+        this._playerData.set(key, value);
     }
 
     async clearData(key) {
@@ -44,6 +54,7 @@ class reverbPlayer extends Player {
 
     async setFairPlay() {
         let tracks = [...this.queue.tracks];
+        if (tracks.length <= 1) return tracks;
         let requesterMap = new Map();
 
         // Group tracks by requester

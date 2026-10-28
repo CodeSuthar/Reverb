@@ -1,4 +1,6 @@
-const { eq, sql } = require("drizzle-orm");
+const {
+    eq, sql
+} = require("drizzle-orm");
 
 class botRepository {
     /**

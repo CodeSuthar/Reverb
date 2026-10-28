@@ -1,4 +1,6 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const {
+    EmbedBuilder, SlashCommandBuilder
+} = require("discord.js");
 
 module.exports = {
     slashData: new SlashCommandBuilder()
@@ -22,7 +24,8 @@ module.exports = {
             return await interaction.editReply({ embeds: [emb] });
         }
 
-        if (guildPlayer.getData?.("fairplay")) {
+        const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+        if (isFairPlay) {
             const emb = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(`${client.emojiList.cross} | **The queue cannot be shuffled while FairPlay is enabled.**`);

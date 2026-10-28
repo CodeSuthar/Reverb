@@ -9,7 +9,9 @@ const {
     ActionRowBuilder,
     MessageFlags,
 } = require("discord.js");
-const { convertMillisecondsToTime, executeViewUpdate } = require("../../../utils/musicUtils/index");
+const {
+    convertMillisecondsToTime, executeViewUpdate
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "queueEnd",

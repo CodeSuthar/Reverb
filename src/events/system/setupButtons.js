@@ -1,5 +1,9 @@
-const { EmbedBuilder, MessageFlags, PermissionFlagsBits } = require("discord.js");
-const { convertMillisecondsToTime } = require("../../utils/musicUtils/index");
+const {
+    EmbedBuilder, MessageFlags, PermissionFlagsBits
+} = require("discord.js");
+const {
+    convertMillisecondsToTime
+} = require("../../utils/musicUtils/index");
 
 const BUTTON_ACTIONS = {
     // Play / Pause
@@ -514,7 +518,8 @@ module.exports = {
                         );
                     }
 
-                    if (guildPlayer.get?.("fairplay")) {
+                    const isFairPlay = (await guildPlayer.getData?.("fairplay")) || guildPlayer.get?.("fairplay");
+                    if (isFairPlay) {
                         return await oops(
                             interaction,
                             "The queue cannot be shuffled while FairPlay is enabled.",

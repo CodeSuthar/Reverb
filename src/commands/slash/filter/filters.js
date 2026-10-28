@@ -10,8 +10,8 @@ const {
     SlashCommandBuilder,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
-const COLLECTOR_TIME = 90_000;
+const accentColor = 0xFF66C4;
+const collectorTime = 90_000;
 
 function formatFilterName(filterName) {
     if (!filterName) return "";
@@ -34,7 +34,7 @@ function getActiveFilters(player) {
 }
 
 function buildFilterView(availableFilters, selectedFilters, appliedFilters, statusText = null, disabled = false, client) {
-    const container = new ContainerBuilder().setAccentColor(ACCENT_COLOR);
+    const container = new ContainerBuilder().setAccentColor(accentColor);
 
     const titleText = `## ${client.emojiList.filters} | Audio Equalizers & DSP Filters\n`;
     const subtitleText = "Toggle desired filters using the buttons below, then click **Apply Filters** to commit changes.\n";
@@ -116,7 +116,7 @@ module.exports = {
 
         const collector = reply.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: COLLECTOR_TIME,
+            time: collectorTime,
         });
 
         collector.on("collect", async (btnInt) => {

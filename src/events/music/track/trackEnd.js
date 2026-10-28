@@ -1,4 +1,6 @@
-const { buildSetupView, updateVoiceStatus } = require("../../../utils/musicUtils/index");
+const {
+    buildSetupView, updateVoiceStatus
+} = require("../../../utils/musicUtils/index");
 
 module.exports = {
     name: "trackEnd",

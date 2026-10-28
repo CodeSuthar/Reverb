@@ -11,7 +11,7 @@ const {
     MessageFlags,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
+const accentColor = 0xFF66C4;
 
 // Ordered category sequence for navigation buttons
 const CATEGORY_ORDER = [
@@ -307,7 +307,7 @@ function buildHelpView({
     isDeveloper = false,
     disabled = false,
 }) {
-    const accentColor = client?.color?.number ?? ACCENT_COLOR;
+    const accentColor = client?.color?.number ?? accentColor;
     const botName = client?.botName || "Reverb";
     const canShowDev = shouldDisplayDeveloper({ client, isDeveloper });
     const currentCat = CATEGORY_ORDER.includes(category)
@@ -586,7 +586,7 @@ function buildHelpView({
  * @returns {{ container: ContainerBuilder, components: ContainerBuilder[], flags: number }}
  */
 function buildCommandDetailView({ client, query, prefix = client?.config?.bot?.prefix || client?.prefix || "r!", isDeveloper = false }) {
-    const accentColor = client?.color?.number ?? ACCENT_COLOR;
+    const accentColor = client?.color?.number ?? accentColor;
     const normalizedQuery = (query || "").trim().toLowerCase();
     const canShowDev = shouldDisplayDeveloper({ client, isDeveloper });
     const container = new ContainerBuilder().setAccentColor(accentColor);

@@ -11,14 +11,16 @@ const {
     EmbedBuilder
 } = require("discord.js");
 
-const { convertMillisecondsToTime } = require("../../../utils/musicUtils");
+const {
+    convertMillisecondsToTime
+} = require("../../../utils/musicUtils");
 
 module.exports = {
     name: "grab",
     description: "Send the currently playing track to your DMs.",
     usage: "",
     category: "music",
-    aliases: [],
+    aliases: ["dm", "send", "grabtrack", "grabnowplaying"],
     player: {
         active: true,
         playing: true,

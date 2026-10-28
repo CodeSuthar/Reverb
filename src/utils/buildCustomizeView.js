@@ -14,7 +14,7 @@ const {
     PermissionFlagsBits,
 } = require("discord.js");
 
-const ACCENT_COLOR = 0xFF66C4;
+const accentColor = 0xFF66C4;
 
 /**
  * Builds the Components V2 Container for the Bot Customization panel.
@@ -26,7 +26,7 @@ const ACCENT_COLOR = 0xFF66C4;
  * @returns {{ container: ContainerBuilder, components: ContainerBuilder[], flags: number }}
  */
 function buildCustomizeView({ client, guild = null, disabled = false }) {
-    const accentColor = client?.color?.number ?? ACCENT_COLOR;
+    const accentColor = client?.color?.number ?? accentColor;
     const container = new ContainerBuilder().setAccentColor(accentColor);
     const guildName = guild?.name || "this server";
     const botAvatar =

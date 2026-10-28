@@ -2,9 +2,13 @@ const {
     Manager: nodeLinkManager,
     validate
 } = require("moonlink.js");
-const { Client: lyricsClient } = require("lrclib-api");
+const {
+    Client: lyricsClient
+} = require("lrclib-api");
 const reverbPlayerManager = require("./reverbPlayerManager.js");
-const { readdirSync } = require("fs");
+const {
+    readdirSync
+} = require("fs");
 const logger = require("../utils/logger");
 
 class reverbManager extends nodeLinkManager {

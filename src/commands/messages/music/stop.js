@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "stop",
     description: "Stop the currently playing music and clears the queue.",
     usage: "",
     category: "music",
-    aliases: [],
+    aliases: ["st", "end"],
     player: {
         voice: true,
         active: true,

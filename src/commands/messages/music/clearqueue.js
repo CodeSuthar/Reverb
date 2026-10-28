@@ -1,12 +1,13 @@
-
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "clearqueue",
     description: "Clear all upcoming tracks from the queue.",
     usage: "",
     category: "music",
-    aliases: ["cq", "clearq", "clear"],
+    aliases: ["cq", "clear", "clearq"],
     player: {
         voice: true,
         active: true,

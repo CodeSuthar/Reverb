@@ -1,11 +1,13 @@
-const { EmbedBuilder } = require("discord.js");
+const {
+    EmbedBuilder
+} = require("discord.js");
 
 module.exports = {
     name: "ping",
     description: "Check the bot's response latency and WebSocket ping.",
     usage: "",
     category: "info",
-    aliases: ["pong", "latency"],
+    aliases: ["pong", "latency", "pingpong", "pinglatency"],
     run: async (message, args, client, prefix) => {
         const startTime = Date.now();
 
