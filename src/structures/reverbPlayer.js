@@ -9,31 +9,23 @@ class reverbPlayer extends Player {
         this.client = manager.client;
         this.lyricsClient = manager.lyricsClient;
 
-        this._playerData = new Map();
-
         this._resolveChannels().catch((err) => {
             (this.client?.logger || require("../utils/logger")).error(`Failed to resolve channels for player in guild ${this.guildId}:`, err);
         });
     }
 
     async setData(key, value) {
-        this._playerData.set(key, value);
+        this.set(key, value);
     }
 
     async getData(key) {
-        return this._playerData.get(key);
-    }
-
-    get(key) {
-        return this._playerData.get(key);
-    }
-
-    set(key, value) {
-        this._playerData.set(key, value);
+        return this.get(key);
     }
 
     async clearData(key) {
-        this._playerData.delete(key);
+        if (this.data) {
+            delete this.data[key];
+        }
     }
 
     async setTrackMessage(options) {
